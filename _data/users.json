@@ -1,0 +1,23 @@
+[
+	{
+		"_id": "5d7a514b5d2c12c7449be042",
+		"name": "Admin Account",
+		"email": "admin@gmail.com",
+		"role": "admin",
+		"password": "123456"
+	},
+	{
+		"_id": "5d7a514b5d2c12c7449be044",
+		"name": "User Account",
+		"email": "brandon@gmail.com",
+		"role": "user",
+		"password": "123456"
+	},
+	{
+		"_id": "5d7a514b5d2c12c7449be045",
+		"name": "Theon Greayjoy",
+		"email": "theon@gmail.com",
+		"role": "volunteer",
+		"password": "123456"
+	}
+]
