@@ -6,12 +6,34 @@ const CampSchema = new mongoose.Schema({
     required: [true, 'Es necesario agregar un nombre'],
     unique: true,
     trim: true,
-    maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
+    maxlength: [40, 'El nombre no puede exceder 30 caracteres'],
   },
   slug: String,
-  nationality: {
+  edition: String,
+  location: {
     type: String,
-    required: [true, 'Es necesario agregar nacionalidad'],
+    required: [true, 'Es necesario agregar una locación'],
+  },
+  description: String,
+  tag: {
+    type: [String],
+    required: true,
+    enum: [
+      'urbano',
+      'montaña',
+      'playa'
+    ]
+  },
+  activities: {
+    type: [String],
+    required: true,
+    enum: [
+      'piscina',
+      'museo',
+      'lectura',
+      'taller de reciclaje',
+      'taller de artesanias'
+    ]
   },
   address: {
     type: String,
@@ -40,9 +62,7 @@ const CampSchema = new mongoose.Schema({
     type: Number,
     default: 30,
   },
-  inPeople: {
-    type: Number,
-  },
+  inPeople: Number,
   available: {
     type: Boolean,
     default: true,

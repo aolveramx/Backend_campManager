@@ -22,21 +22,27 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Es necesario agregar tu género'],
   },
   documentId: {
-    type: String,
+    type: [String],
     required: [true, 'Es necesario agregar el tipo de identificación'],
+    enum: [
+      'DNI',
+      'NIE',
+      'PASS'
+    ],
   },
   idNumber: {
     type: String,
     required: [true, 'Es necesario agregar el número de identificación'],
+    match: [
+      /^[A-Z0-9]+$/,
+      'Ingresa un Id válido',
+    ],
   },
   bornDate: {
     type: Date,
     required: [true, 'Es necesario agregar tu fecha de nacimiento'],
   },
-  tutor: {
-    type: String,
-    required: [true, 'Es necesario agregar a un tutor'],
-  },
+  tutor:String,
   address: {
     type: String,
     required: [true, 'Es necesario agregar tu dirección'],
@@ -46,17 +52,26 @@ const UserSchema = new mongoose.Schema({
     maxlength: [15, 'El número de teléfono no puede ser mayor a 15 caracteres'],
   },
   medicalKnowledge: {
-    type: String,
+    type: Boolean,
+    required: [true, 'Es necesario indicar si cuentas con conocimientos médicos'],
+    default: false,
   },
   about: {
     type: String,
+    required: [true, 'Es necesario contar con una breve descripción de tí'],
   },
+  allergies: {
+    type: String,
+    required: [true, 'Es importante indicar si tienes alergias'],
+  },
+  curriculum: String,
   photo: {
     type: String,
     default: 'default-profile-photo.jpg'
   },
   username: {
     type: String,
+    required: [true, 'Es obligatorio ingresar un nombre de usuario'],
     unique: true,
   },
   email: {
@@ -65,19 +80,22 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Please add a valid email',
+      'Ingresa un correo electrónico válido',
     ],
   },
   role: {
-    type: String,
-    enum: ['guest', 'helper'],
+    type: [String],
+    required: true,
+    enum: [
+      'guest',
+      'helper'
+    ],
     default: 'guest'
   },
   password: {
     type: String,
     required: [true, 'Ingresa una contraseña de mínimo 6 caracteres'],
     minlength: 6,
-    select: false,
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,

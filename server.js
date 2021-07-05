@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Mount Routers
 app.use('/api/v1/camps', camps)
 app.use('/api/v1/auth', auth)
-app.use('/api/v1/auth/users', users)
+app.use('/api/v1/users', users)
 
 // Init Server
 const PORT = process.env.PORT || 5000;
