@@ -26,6 +26,11 @@ const users = require('./routes/users')
 // Init app
 const app = express();
 
+// Dev logging middleware
+if (process.env.NODE_ENV === 'development' ) {
+  app.use(morgan('dev'))
+}
+
 //File uploading
 app.use(fileupload())
 
