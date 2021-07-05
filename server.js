@@ -26,34 +26,31 @@ const users = require('./routes/users')
 // Init app
 const app = express();
 
+// Body parser middleware
+app.use(express.json())
+
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development' ) {
   app.use(morgan('dev'))
 }
 
+// Security Libraries
 //File uploading
 app.use(fileupload())
-
 //Sanitize data
 app.use(mongoSanitize())
-
 //Set security headers
 app.use(helmet())
-
 //Prevent XSS attacks
 app.use(xss())
-
 //Rate limiting
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 mins
   max: 100,
 })
-
 app.use(limiter)
-
 //Prevent http param pollution
 app.use(hpp())
-
 //Enable CORS
 app.use(cors())
 
@@ -70,7 +67,7 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(
   PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold)
 );
 
 //Handle unhandled promise rejections

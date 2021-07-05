@@ -8,6 +8,7 @@ const CampSchema = new mongoose.Schema({
     trim: true,
     maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
   },
+  slug: String,
   nationality: {
     type: String,
     required: [true, 'Es necesario agregar nacionalidad'],
@@ -24,7 +25,7 @@ const CampSchema = new mongoose.Schema({
     type: String,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Please add a valid email',
+      'Ingresa un email válido',
     ],
   },
   from: {
@@ -58,16 +59,7 @@ const CampSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  user: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: true,
-  },
 },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  },
 )
 
 module.exports = mongoose.model('Camp', CampSchema)
