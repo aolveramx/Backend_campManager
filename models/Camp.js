@@ -1,0 +1,73 @@
+const mongoose = require('mongoose')
+
+const CampSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Es necesario agregar un nombre'],
+    unique: true,
+    trim: true,
+    maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
+  },
+  nationality: {
+    type: String,
+    required: [true, 'Es necesario agregar nacionalidad'],
+  },
+  address: {
+    type: String,
+    required: [true, 'Es necesario agregar dirección'],
+  },
+  phone: {
+    type: String,
+    maxlength: [15, 'El número de teléfono no puede ser mayor a 15 caracteres'],
+  },
+  email: {
+    type: String,
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      'Please add a valid email',
+    ],
+  },
+  from: {
+    type: Date,
+    default: Date.now,
+  },
+  to: {
+    type: Date,
+    default: Date.now,
+  },
+  capacity: {
+    type: Number,
+    default: 30,
+  },
+  inPeople: {
+    type: Number,
+  },
+  available: {
+    type: Boolean,
+    default: true,
+  },
+  helpers: {
+    type: [String],
+    default: [],
+  },
+  guests: {
+    type: [String],
+    default: [],
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+},
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+)
+
+module.exports = mongoose.model('Camp', CampSchema)

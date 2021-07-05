@@ -16,7 +16,7 @@ const connectDB = require('./config/db')
 dotenv.config({ path: "./config/config.env" });
 
 // Connect to DB
-// connectDB()
+connectDB()
 
 // Route files
 const camps = require('./routes/camps')
