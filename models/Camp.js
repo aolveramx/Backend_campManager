@@ -82,4 +82,6 @@ const CampSchema = new mongoose.Schema({
 },
 )
 
-module.exports = mongoose.model('Camp', CampSchema)
+const Camp = mongoose.model('Camp', CampSchema)
+
+module.exports = Camp;
