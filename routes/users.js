@@ -20,8 +20,4 @@ router
   .put(updateUser)
   .delete(deleteUser)
 
-router
-  .route('/:id/photo')
-  .put(updateUserPhoto)
-
 module.exports = router

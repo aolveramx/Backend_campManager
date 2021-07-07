@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const slugify = require('slugify')
 
 const CampSchema = new mongoose.Schema({
   name: {
@@ -81,5 +82,11 @@ const CampSchema = new mongoose.Schema({
   },
 },
 )
+
+// Create slug: user friendly url from name
+CampSchema.pre('save', function(next) {
+  this.slug = slugify(this.name, { replacement: '-' })
+  next()
+})
 
 module.exports = mongoose.model('Camp', CampSchema)

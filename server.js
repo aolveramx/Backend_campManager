@@ -3,6 +3,7 @@ const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
 const colors = require('colors')
+const errorHandler = require('./middleware/error')
 const fileupload = require('express-fileupload')
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
@@ -61,6 +62,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/api/v1/camps', camps)
 app.use('/api/v1/auth', auth)
 app.use('/api/v1/users', users)
+
+app.use(errorHandler)
+
 
 // Init Server
 const PORT = process.env.PORT || 5000;
