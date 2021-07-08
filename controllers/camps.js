@@ -8,8 +8,7 @@ const Camp = require('../models/Camp')
  * @access  Public
  */
 exports.getCamps = asyncHandler(async (req, res, next) => {
-  const camps = await Camp.find()
-  res.status(200).json({ success: true, count: camps.length, data: camps })
+  res.status(200).json(res.filtering)
 }) 
 
 /**

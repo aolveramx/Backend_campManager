@@ -33,7 +33,11 @@ const CampSchema = new mongoose.Schema({
       'museo',
       'lectura',
       'taller de reciclaje',
-      'taller de artesanias'
+      'taller de artesanias',
+      'conferencia magistral',
+      'seminario',
+      'espectaculo',
+      'meditacion'
     ]
   },
   address: {
