@@ -1,15 +1,16 @@
 const express = require('express')
+const router = express.Router()
+const { protect } = require('../middleware/auth')
 const {
   register,
   login,
-  me,
+  getMe,
   updateInfo,
   updatePassword,
   forgotPassword,
   resetPassword,
   logout
 } = require('../controllers/auth')
-const router = express.Router()
 
 router
   .route('/register')
@@ -21,7 +22,7 @@ router
 
 router
   .route('/me')
-  .get(me)
+  .get(protect, getMe)
 
 router
   .route('/:id/updateinfo')

@@ -32,21 +32,10 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 })
 
 /**
- * @route   POST api/v1/users
- * @desc    Create a user
- * @access  Public
- * @role    admin/guest/helper
- */
-exports.createUser = asyncHandler(async (req, res, next) => {
-  const user = await User.create(req.body)
-  res.status(201).json({ success: true, data: user })
-})
-
-/**
  * @route   PUT api/v1/users/:id
  * @desc    Update user
  * @access  Private
- * @role    admin/guest/helper
+ * @role    admin
  */
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -69,7 +58,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
  * @access  Private
  * @role    admin/guest/helper
  */
-exports.deleteUser = asyncHandler(async (req, res, next) => {
+exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.id)
 
   if (!user) {

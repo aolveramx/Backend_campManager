@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const colors = require('colors')
 const errorHandler = require('./middleware/error')
 const fileupload = require('express-fileupload')
+const cookieParser = require('cookie-parser')
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 const xss = require('xss-clean')
@@ -29,6 +30,9 @@ const app = express();
 
 // Body parser middleware
 app.use(express.json())
+
+// Cookie parser
+app.use(cookieParser())
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development' ) {

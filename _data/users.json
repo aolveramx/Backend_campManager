@@ -9,7 +9,7 @@
 		"idNumber": "A1234567",
 		"bornDate": "1980-12-09",
 		"tutor": "",
-		"address": "kings Landyng at the red keep",
+		"address": "kings Landing at the red keep",
 		"phone": "111-111-1111",
 		"medicalKnowledge": true,
 		"about": "im the rightfull heir to the iron trhone",
@@ -17,7 +17,7 @@
 		"curriculum": "url://",
 		"photo": "url://",
 		"username": "morningSword",
-		"email": "reagear@gmail.com",
+		"email": "rhaegar@gmail.com",
 		"role": "helper",
 		"password": "123456"
 	},

@@ -38,25 +38,24 @@ node seeder -d
 
 #### **Users:**
 
-| Function        | Method | URL                                     |
-| --------------- | ------ | --------------------------------------- |
-| Get all users   | GET    | http://localhost:5000/api/v1/users      |
-| Get single user | GET    | http://localhost:5000/api/v1/users/\_id |
-| Update user     | PUT    | http://localhost:5000/api/v1/users/\_id |
-| Create a user   | POST   | http://localhost:5000/api/v1/users      |
-| Delete a user   | DELETE | http://localhost:5000/api/v1/users/\_id |
+| Function          | Method | Auth            | URL                                     |
+| ----------------- | ------ | --------------- | --------------------------------------- |
+| Get all users     | GET    | admin           | http://localhost:5000/api/v1/users      |
+| Get single user   | GET    | admin           | http://localhost:5000/api/v1/users/\_id |
+| Update user       | PUT    | admin           | http://localhost:5000/api/v1/users/\_id |
+| Delete my account | DELETE | guest or helper | http://localhost:5000/api/v1/users/\_id |
 
 <br>
 
 #### **Camps:**
 
-| Function        | Method | URL                                     |
-| --------------- | ------ | --------------------------------------- |
-| Get all camps   | GET    | http://localhost:5000/api/v1/camps      |
-| Get single camp | GET    | http://localhost:5000/api/v1/camps/\_id |
-| Update camp     | PUT    | http://localhost:5000/api/v1/camps/\_id |
-| Create camp     | POST   | http://localhost:5000/api/v1/camps      |
-| Delete camp     | DELETE | http://localhost:5000/api/v1/camps/\_id |
+| Function        | Method | Auth      | URL                                     |
+| --------------- | ------ | --------- | --------------------------------------- |
+| Get all camps   | GET    | everybody | http://localhost:5000/api/v1/camps      |
+| Get single camp | GET    | everybody | http://localhost:5000/api/v1/camps/\_id |
+| Update camp     | PUT    | admin     | http://localhost:5000/api/v1/camps/\_id |
+| Create camp     | POST   | admin     | http://localhost:5000/api/v1/camps      |
+| Delete camp     | DELETE | admin     | http://localhost:5000/api/v1/camps/\_id |
 
 <br>
 
