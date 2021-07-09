@@ -22,13 +22,13 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
-  if (!camp) {
+  if (!user) {
     return next(
       new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
     )
   }
 
-  res.status(200).json({ sucess: true, count: users.length, data: user })
+  res.status(200).json({ sucess: true, data: user })
 })
 
 /**
