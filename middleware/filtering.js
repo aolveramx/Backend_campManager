@@ -7,8 +7,13 @@ const filtering = (model) => async (req, res, next) => {
   removeFields.forEach(param => delete reqQuery[param])
 
   let queryStr = JSON.stringify(reqQuery)
+  let queryLowerCase = queryStr.toLowerCase();
   queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
+  queryLowerCase = queryLowerCase.replace(/\b(in)\b/g, match => `$${match}`)
   query = model.find(JSON.parse(queryStr))
+  console.log(queryLowerCase,'querytoLower')
+  console.log(query.collection,'query')
+  console.log(req.query,'req.query')
 
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ')
