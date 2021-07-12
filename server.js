@@ -1,17 +1,20 @@
+// General dependencies
 const path = require('path')
 const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
 const colors = require('colors')
 const errorHandler = require('./middleware/error')
-const fileupload = require('express-fileupload')
 const cookieParser = require('cookie-parser')
+const fileupload = require('express-fileupload')
+// Security dependencies 
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 const xss = require('xss-clean')
 const rateLimit = require('express-rate-limit')
 const hpp = require('hpp')
 const cors = require('cors')
+// Connect DB Config
 const connectDB = require('./config/db')
 
 // Load env vars
@@ -39,9 +42,10 @@ if (process.env.NODE_ENV === 'development' ) {
   app.use(morgan('dev'))
 }
 
-// Security Libraries
 //File uploading
 app.use(fileupload())
+
+// Security Dependencies
 //Sanitize data
 app.use(mongoSanitize())
 //Set security headers
@@ -68,7 +72,6 @@ app.use('/api/v1/auth', auth)
 app.use('/api/v1/users', users)
 
 app.use(errorHandler)
-
 
 // Init Server
 const PORT = process.env.PORT || 5000;
