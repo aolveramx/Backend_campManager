@@ -38,12 +38,14 @@ node seeder -d
 
 #### **Users:**
 
-| Function          | Method | Auth            | URL                                     |
-| ----------------- | ------ | --------------- | --------------------------------------- |
-| Get all users     | GET    | admin           | http://localhost:5000/api/v1/users      |
-| Get single user   | GET    | admin           | http://localhost:5000/api/v1/users/\_id |
-| Update user       | PUT    | admin           | http://localhost:5000/api/v1/users/\_id |
-| Delete my account | DELETE | guest or helper | http://localhost:5000/api/v1/users/\_id |
+| Function          | Method | Auth            | URL                                           |
+| ----------------- | ------ | --------------- | --------------------------------------------- |
+| Get all users     | GET    | admin           | http://localhost:5000/api/v1/users            |
+| Get single user   | GET    | admin           | http://localhost:5000/api/v1/users/\_id       |
+| Update user       | PUT    | admin           | http://localhost:5000/api/v1/users/\_id       |
+| Upload photo      | PUT    | guest or helper | http://localhost:5000/api/v1/users/\_id/photo |
+| Upload CV         | PUT    | guest or helper | http://localhost:5000/api/v1/users/\_id/cv    |
+| Delete my account | DELETE | guest or helper | http://localhost:5000/api/v1/users/\_id       |
 
 <br>
 
