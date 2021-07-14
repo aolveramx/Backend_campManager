@@ -5,13 +5,20 @@ const filtering = (model) => async (req, res, next) => {
 
   // Filtering
   const reqQuery = { ...req.query }
-  const queryTransformed = queryCapitalized(reqQuery)
   const removeFields = ['select', 'sort', 'page', 'limit']
-  removeFields.forEach(param => delete queryTransformed[param])
-  let queryStr = JSON.stringify(queryTransformed)
+  removeFields.forEach(param => delete reqQuery[param])
+  let queryStr = JSON.stringify(reqQuery)
   queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
   query = model.find(JSON.parse(queryStr))
+  console.log(req.query,'req.query')
 
+  if(req.query) {
+    const queryTransformed = queryCapitalized(reqQuery)
+    removeFields.forEach(param => delete queryTransformed[param])
+    let queryStr = JSON.stringify(queryTransformed)
+    queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
+    query = model.find(JSON.parse(queryStr))
+  }
 
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ')
