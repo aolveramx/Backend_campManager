@@ -1,18 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const { protect, authorize } = require('../middleware/auth')
-const { 
-  getUsers, 
+const {
+  getUsers,
   getUser,
-  updateUser, 
+  updateUser,
   userPhotoUpload,
-  userCvUpload, 
-  deleteMyAccount 
+  userCvUpload,
+  deleteMyAccount,
 } = require('../controllers/users')
 
-router
-  .route('/')
-  .get(protect, authorize('admin'), getUsers)
+router.route('/').get(protect, authorize('admin'), getUsers)
 
 router
   .route('/:id')
@@ -20,12 +18,8 @@ router
   .put(protect, authorize('admin'), updateUser)
   .delete(deleteMyAccount)
 
-router
-  .route('/:id/photo')
-  .put(userPhotoUpload)
+router.route('/:id/photo').put(userPhotoUpload)
 
-router
-  .route('/:id/cv')
-  .put(userCvUpload)
+router.route('/:id/cv').put(userCvUpload)
 
 module.exports = router

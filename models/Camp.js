@@ -4,55 +4,51 @@ const slugify = require('slugify')
 const CampSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Es necesario agregar un nombre'],
+    required: [true, 'Please add a name'],
     unique: true,
     trim: true,
-    maxlength: [40, 'El nombre no puede exceder 30 caracteres'],
+    maxlength: [50, 'Name can not be more than 50 characters'],
   },
   slug: String,
   edition: String,
   location: {
     type: String,
-    required: [true, 'Es necesario agregar una locación'],
+    required: [true, 'Please add a location'],
   },
   description: String,
   tag: {
     type: [String],
     required: true,
-    enum: [
-      'urbano',
-      'montaña',
-      'playa'
-    ]
+    enum: ['urban', 'mountain', 'beach'],
   },
   activities: {
     type: [String],
     required: true,
     enum: [
-      'piscina',
-      'museo',
-      'lectura',
-      'taller de reciclaje',
-      'taller de artesanias',
-      'conferencia magistral',
-      'seminario',
-      'espectaculo',
-      'meditacion'
-    ]
+      'pool',
+      'museum',
+      'reading',
+      'recycling workshop',
+      'crafts workshop',
+      'conference',
+      'seminar',
+      'show',
+      'meditation',
+    ],
   },
   address: {
     type: String,
-    required: [true, 'Es necesario agregar dirección'],
+    required: [true, 'Please add an address'],
   },
   phone: {
     type: String,
-    maxlength: [15, 'El número de teléfono no puede ser mayor a 15 caracteres'],
+    maxlength: [15, 'Phone number can not be more than 15 characters'],
   },
   email: {
     type: String,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Ingresa un email válido',
+      'Please add a valid email',
     ],
   },
   from: {
@@ -84,11 +80,10 @@ const CampSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-},
-)
+})
 
 // Create slug: user friendly url from name
-CampSchema.pre('save', function(next) {
+CampSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { replacement: '-' })
   next()
 })

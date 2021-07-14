@@ -4,18 +4,18 @@ const ErrorResponse = require('../utils/errorResponse')
 const User = require('../models/User')
 
 // Protect routes
-exports.protect = asyncHandler(async(req, res, next) => {
+exports.protect = asyncHandler(async (req, res, next) => {
   let token
 
   if (
-    req.headers.authorization && 
+    req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1]
   }
 
-  if(!token) {
-    return next(new ErrorResponse('Sin autorización', 401))
+  if (!token) {
+    return next(new ErrorResponse('Not authorized', 401))
   }
 
   try {
@@ -23,7 +23,7 @@ exports.protect = asyncHandler(async(req, res, next) => {
     req.user = await User.findById(decoded.id)
     next()
   } catch (error) {
-    return next(new ErrorResponse('Sin autorización', 401))
+    return next(new ErrorResponse('Not authorized', 401))
   }
 })
 
@@ -31,7 +31,12 @@ exports.protect = asyncHandler(async(req, res, next) => {
 exports.authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(new ErrorResponse(`El usuario con el rol ${req.user.role} no esta authorizado`, 403))
+      return next(
+        new ErrorResponse(
+          `The user with rol ${req.user.role} is not authorized to access this route`,
+          403
+        )
+      )
     }
     next()
   }

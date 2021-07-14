@@ -9,39 +9,23 @@ const {
   updatePassword,
   forgotPassword,
   resetPassword,
-  logout
+  logout,
 } = require('../controllers/auth')
 
-router
-  .route('/register')
-  .post(register)
+router.route('/register').post(register)
 
-router
-  .route('/login')
-  .post(login)
+router.route('/login').post(login)
 
-router
-  .route('/me')
-  .get(protect, getMe)
+router.route('/me').get(protect, getMe)
 
-router
-  .route('/:id/updateinfo')
-  .put(updateInfo)
+router.route('/:id/updateinfo').put(updateInfo)
 
-router
-  .route('/:id/updatepassword')
-  .put(updatePassword)
+router.route('/:id/updatepassword').put(updatePassword)
 
-router
-  .route('/forgotpassword')
-  .post(forgotPassword)
+router.route('/forgotpassword').post(forgotPassword)
 
-router
-  .route('/:id/resettoken')
-  .put(resetPassword)
+router.route('/:id/resettoken').put(resetPassword)
 
-router
-  .route('/logout')
-  .get(logout)
+router.route('/logout').get(logout)
 
 module.exports = router

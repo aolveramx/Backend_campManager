@@ -9,7 +9,7 @@ const Camp = require('../models/Camp')
  */
 exports.getCamps = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.filtering)
-}) 
+})
 
 /**
  * @route   GET api/v1/camps/:id
@@ -18,7 +18,7 @@ exports.getCamps = asyncHandler(async (req, res, next) => {
  */
 exports.getCamp = asyncHandler(async (req, res, next) => {
   const camp = await Camp.findById(req.params.id)
-  
+
   if (!camp) {
     return next(
       new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404)
@@ -36,7 +36,7 @@ exports.getCamp = asyncHandler(async (req, res, next) => {
  */
 exports.createCamp = asyncHandler(async (req, res, next) => {
   const camp = await Camp.create(req.body)
-  res.status(201).json({ success:true, data: camp })
+  res.status(201).json({ success: true, data: camp })
 })
 
 /**
@@ -46,9 +46,9 @@ exports.createCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.updateCamp = asyncHandler(async (req, res, next) => {
-  const camp = await Camp.findByIdAndUpdate(req.params.id, req.body, { 
+  const camp = await Camp.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-    runValidators: true, 
+    runValidators: true,
   })
 
   if (!camp) {

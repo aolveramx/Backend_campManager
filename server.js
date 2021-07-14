@@ -7,7 +7,7 @@ const colors = require('colors')
 const errorHandler = require('./middleware/error')
 const cookieParser = require('cookie-parser')
 const fileupload = require('express-fileupload')
-// Security dependencies 
+// Security dependencies
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 const xss = require('xss-clean')
@@ -18,7 +18,7 @@ const cors = require('cors')
 const connectDB = require('./config/db')
 
 // Load env vars
-dotenv.config({ path: "./config/config.env" });
+dotenv.config({ path: './config/config.env' })
 
 // Connect to DB
 connectDB()
@@ -29,7 +29,7 @@ const auth = require('./routes/auth')
 const users = require('./routes/users')
 
 // Init app
-const app = express();
+const app = express()
 
 // Body parser middleware
 app.use(express.json())
@@ -38,7 +38,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 // Dev logging middleware
-if (process.env.NODE_ENV === 'development' ) {
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
@@ -74,12 +74,14 @@ app.use('/api/v1/users', users)
 app.use(errorHandler)
 
 // Init Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000
 
 app.listen(
   PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold)
-);
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  )
+)
 
 //Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {

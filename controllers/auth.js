@@ -7,16 +7,16 @@ const User = require('../models/User')
  * @desc    Auth user & get token
  * @access  Public
  */
-exports.register = asyncHandler(async(req, res, next) => {
-  const { 
-    name, 
-    lastName, 
-    nationality, 
-    gender, 
-    documentId, 
-    idNumber, 
-    bornDate, 
-    tutor, 
+exports.register = asyncHandler(async (req, res, next) => {
+  const {
+    name,
+    lastName,
+    nationality,
+    gender,
+    documentId,
+    idNumber,
+    bornDate,
+    tutor,
     address,
     phone,
     medicalKnowledge,
@@ -24,20 +24,20 @@ exports.register = asyncHandler(async(req, res, next) => {
     allergies,
     curriculum,
     username,
-    email, 
-    password, 
-    role 
+    email,
+    password,
+    role,
   } = req.body
 
   const user = await User.create({
-    name, 
-    lastName, 
-    nationality, 
-    gender, 
-    documentId, 
-    idNumber, 
-    bornDate, 
-    tutor, 
+    name,
+    lastName,
+    nationality,
+    gender,
+    documentId,
+    idNumber,
+    bornDate,
+    tutor,
     address,
     phone,
     medicalKnowledge,
@@ -45,9 +45,9 @@ exports.register = asyncHandler(async(req, res, next) => {
     allergies,
     curriculum,
     username,
-    email, 
-    password, 
-    role
+    email,
+    password,
+    role,
   })
 
   sendTokenResponse(user, 200, res)
@@ -58,26 +58,26 @@ exports.register = asyncHandler(async(req, res, next) => {
  * @desc    Auth user & get token
  * @access  Public
  */
-exports.login = asyncHandler(async(req, res, next) => {
+exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body
 
   // validate email & password
   if (!email || !password) {
-    return next(new ErrorResponse('Ingresa un correo y una contraseña'), 400)
+    return next(new ErrorResponse('Please enter a valid email & password'), 400)
   }
 
-  // check for user 
+  // check for user
   const user = await User.findOne({ email }).select('+password')
 
   if (!user) {
-    return next(new ErrorResponse('Credenciales incorrectas'), 401)
+    return next(new ErrorResponse('Invalid credentials'), 401)
   }
 
   // Check if password matches
   const isMatch = await user.matchPassword(password)
 
   if (!isMatch) {
-    return next(new ErrorResponse('Credenciales incorrectas'), 401)
+    return next(new ErrorResponse('Invalid credentials'), 401)
   }
 
   sendTokenResponse(user, 200, res)
@@ -89,7 +89,7 @@ exports.login = asyncHandler(async(req, res, next) => {
  * @access  Private
  * @role    admin/guest/helper
  */
-exports.getMe = asyncHandler(async(req, res, next) => {
+exports.getMe = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id)
 
   res.status(200).json({ success: true, data: user })
@@ -101,9 +101,10 @@ exports.getMe = asyncHandler(async(req, res, next) => {
  * @access  Private
  * @role    admin/guest/helper
  */
-exports.updateInfo = (req, res, next) => (
-  res.status(200).json({ success: true, msg: 'Actualizar información de usuario' })
-)
+exports.updateInfo = (req, res, next) =>
+  res
+    .status(200)
+    .json({ success: true, msg: 'Update user info' })
 
 /**
  * @route   PUT api/v1/auth/updatepassword
@@ -111,9 +112,8 @@ exports.updateInfo = (req, res, next) => (
  * @access  Private
  * @role    admin/guest/helper
  */
-exports.updatePassword = (req, res, next) => (
-  res.status(200).json({ success: true, msg: 'Actualizar contraseña' })
-)
+exports.updatePassword = (req, res, next) =>
+  res.status(200).json({ success: true, msg: 'Update password' })
 
 /**
  * @route   POST api/v1/auth/forgotpassword
@@ -121,18 +121,16 @@ exports.updatePassword = (req, res, next) => (
  * @access  Private
  * @role    admin/guest/helper
  */
-exports.forgotPassword = (req, res, next) => (
-  res.status(200).json({ success: true, msg: 'Olvide contraseña' })
-)
+exports.forgotPassword = (req, res, next) =>
+  res.status(200).json({ success: true, msg: 'Forgot password' })
 
 /**
  * @route   PUT api/v1/auth/:id/resettoken
  * @desc    Reset password
  * @access  Public
  */
-exports.resetPassword = (req, res, next) => (
-  res.status(200).json({ success: true, msg: 'Reiniciar password' })
-)
+exports.resetPassword = (req, res, next) =>
+  res.status(200).json({ success: true, msg: 'Reset password' })
 
 /**
  * @route   GET api/v1/auth/logout
@@ -140,9 +138,8 @@ exports.resetPassword = (req, res, next) => (
  * @access  Privado
  * @role    admin/guest/helper
  */
-exports.logout = (req, res, next) => (
-  res.status(200).json({ success: true, msg: 'Cerrar sesión' })
-)
+exports.logout = (req, res, next) =>
+  res.status(200).json({ success: true, msg: 'logout' })
 
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
@@ -150,19 +147,18 @@ const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignJWtToken()
 
   const options = {
-    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000 ),
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ),
     httpOnly: true,
   }
 
-  if(process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     opctions.secure = true
   }
 
-  res
-    .status(statusCode)
-    .cookie('token', token, options)
-    .json({
-      success: true,
-      token
-    })
+  res.status(statusCode).cookie('token', token, options).json({
+    success: true,
+    token,
+  })
 }

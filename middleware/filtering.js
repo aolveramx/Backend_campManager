@@ -1,4 +1,4 @@
-const filtering = (model) => async (req, res, next) => {
+const filtering = model => async (req, res, next) => {
   let query
 
   // Filtering
@@ -40,14 +40,14 @@ const filtering = (model) => async (req, res, next) => {
   if (endIndex < total) {
     pagination.next = {
       page: page + 1,
-      limit
+      limit,
     }
   }
 
   if (startIndex > 0) {
     pagination.prev = {
       page: page - 1,
-      limit
+      limit,
     }
   }
 
@@ -55,10 +55,10 @@ const filtering = (model) => async (req, res, next) => {
     sucess: true,
     count: results.length,
     pagination,
-    data: results
+    data: results,
   }
 
   next()
-} 
+}
 
 module.exports = filtering

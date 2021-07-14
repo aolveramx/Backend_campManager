@@ -68,41 +68,38 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
     )
   }
 
-  if(!req.files) {
-    return next(
-      new ErrorResponse(`Upload a photo`, 400)
-    )
+  if (!req.files) {
+    return next(new ErrorResponse(`Upload a photo`, 400))
   }
 
   const file = req.files.file
 
   if (!file.mimetype.startsWith('image')) {
-    return next(
-      new ErrorResponse(`Upload an image file`, 400)
-    )
+    return next(new ErrorResponse(`Upload an image file`, 400))
   }
 
   if (file.size > process.env.MAX_PHOTO_UPLOAD) {
     return next(
-      new ErrorResponse(`Upload an image file less than ${process.env.MAX_PHOTO_UPLOAD}`, 400)
+      new ErrorResponse(
+        `Upload an image file less than ${process.env.MAX_PHOTO_UPLOAD}`,
+        400
+      )
     )
   }
-  
+
   file.name = `photo_${user._id}${path.parse(file.name).ext}`
 
   file.mv(`${process.env.USER_PHOTO_UPLOAD}/${file.name}`, async error => {
     if (error) {
       console.log(error)
-      return next(
-        new ErrorResponse(`Problem with file upload`, 500)
-      )
+      return next(new ErrorResponse(`Problem with file upload`, 500))
     }
 
     await User.findByIdAndUpdate(req.params.id, { photo: file.name })
 
     res.status(200).json({
       success: true,
-      data: file.name
+      data: file.name,
     })
   })
 })
@@ -113,7 +110,7 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
  * @access  Private
  * @role    admin/guest/helper
  */
- exports.userCvUpload = asyncHandler(async (req, res, next) => {
+exports.userCvUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
   if (!user) {
@@ -122,10 +119,8 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
     )
   }
 
-  if(!req.files) {
-    return next(
-      new ErrorResponse(`Upload a file`, 400)
-    )
+  if (!req.files) {
+    return next(new ErrorResponse(`Upload a file`, 400))
   }
 
   console.log(req.files)
@@ -133,32 +128,31 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
   const file = req.files.file
 
   if (!file.mimetype.startsWith('application/pdf')) {
-    return next(
-      new ErrorResponse(`Upload an .PDF file`, 400)
-    )
+    return next(new ErrorResponse(`Upload a .PDF file`, 400))
   }
 
   if (file.size > process.env.MAX_FILE_UPLOAD) {
     return next(
-      new ErrorResponse(`Upload an .PDF file less than ${process.env.MAX_FILE_UPLOAD}`, 400)
+      new ErrorResponse(
+        `Upload a .PDF file less than ${process.env.MAX_FILE_UPLOAD}`,
+        400
+      )
     )
   }
-  
+
   file.name = `CV_${user._id}${path.parse(file.name).ext}`
 
   file.mv(`${process.env.USER_FILE_UPLOAD}/${file.name}`, async error => {
     if (error) {
       console.log(error)
-      return next(
-        new ErrorResponse(`Problem with file upload`, 500)
-      )
+      return next(new ErrorResponse(`Problem with file upload`, 500))
     }
 
     await User.findByIdAndUpdate(req.params.id, { cv: file.name })
 
     res.status(200).json({
       success: true,
-      data: file.name
+      data: file.name,
     })
   })
 })
