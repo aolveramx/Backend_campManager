@@ -1,4 +1,4 @@
-const { queryCapitalized, hasBlanckSpace } = require("../utils/StringTransformation")
+const { queryCapitalized } = require("../utils/StringTransformation")
 
 const filtering = (model) => async (req, res, next) => {
   let query
@@ -7,16 +7,16 @@ const filtering = (model) => async (req, res, next) => {
   const reqQuery = { ...req.query }
   const removeFields = ['select', 'sort', 'page', 'limit']
   removeFields.forEach(param => delete reqQuery[param])
+ 
   let queryStr = JSON.stringify(reqQuery)
   queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
   query = model.find(JSON.parse(queryStr))
   console.log(req.query,'req.query')
 
+  //Request transformations
   if(req.query) {
     const queryTransformed = queryCapitalized(reqQuery)
-    removeFields.forEach(param => delete queryTransformed[param])
     let queryStr = JSON.stringify(queryTransformed)
-    queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
     query = model.find(JSON.parse(queryStr))
   }
 
