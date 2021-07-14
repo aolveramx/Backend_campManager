@@ -5,12 +5,12 @@ let capitalizeFirstLetter = function(string) {
 };
 
 let hasBlanckSpace = function(string) {
-    let subString1='';
-    let subString2='';
-    let subString3='';
-    let subString4='';
-    let subString5='';
-    let subString6='';
+    let subString1=''
+    let subString2=''
+    let subString3=''
+    let subString4=''
+    let subString5=''
+    let subString6=''
     if(string.includes(' ')) {
         const blanckSpace = string.search(/\s/)
         subString1 = string.slice(0, blanckSpace)
@@ -26,7 +26,7 @@ let hasBlanckSpace = function(string) {
                 return subString1.concat(' ',subString3,' ',subString5,' ',subString6)
                 //Example: Senderismo En Los Pirineos
             } else {
-                return subString1.concat(' ',subString3,' ',subString4);
+                return subString1.concat(' ',subString3,' ',subString4)
                 //Example: Aniversario Asistencia Social
             }
         } else {
@@ -34,7 +34,7 @@ let hasBlanckSpace = function(string) {
             //Example: Diplomacia Humanitaria
         }
     } else {
-        return string;
+        return string
     }
 }
 
@@ -44,14 +44,14 @@ let dbRegisterIncludesRequest = function(string) {
 
 let queryCapitalized = function(searchObject) {
     if(searchObject.location) {
-        searchObject.location=capitalizeFirstLetter(searchObject.location);
+        searchObject.location=capitalizeFirstLetter(searchObject.location)
         searchObject.location=hasBlanckSpace(searchObject.location)
     }
     if(searchObject.name) {
-        searchObject.name=capitalizeFirstLetter(searchObject.name);
+        searchObject.name=capitalizeFirstLetter(searchObject.name)
         searchObject.name=hasBlanckSpace(searchObject.name)
     }
-    return searchObject;
+    return searchObject
 }
 
 module.exports = { queryCapitalized, hasBlanckSpace }
