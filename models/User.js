@@ -7,9 +7,15 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
   },
-  lastName: {
+  firstFamilyName: {
     type: String,
     required: [true, 'Es necesario agregar un apellido'],
+    trim: true,
+    maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
+  },
+  secondFamilyName: {
+    type: String,
+    required: [false, 'Es necesario agregar un apellido'],
     trim: true,
     maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
   },

@@ -20,24 +20,24 @@ const CampSchema = new mongoose.Schema({
     type: [String],
     required: true,
     enum: [
-      'urbano',
-      'montaña',
-      'playa'
+      'urban',
+      'mountain',
+      'beach'
     ]
   },
   activities: {
     type: [String],
     required: true,
     enum: [
-      'piscina',
-      'museo',
-      'lectura',
-      'taller de reciclaje',
-      'taller de artesanias',
-      'conferencia magistral',
-      'seminario',
-      'espectaculo',
-      'meditacion'
+      'pool',
+      'museum',
+      'reading',
+      'recycling workshop',
+      'crafts workshop',
+      'conference',
+      'seminar',
+      'show',
+      'meditation'
     ]
   },
   address: {
