@@ -2,7 +2,8 @@
   {
     "_id": "5d7a514b5d2c12c7449be040",
     "name": "Rhaegar",
-    "lastName": "Targaryen",
+    "FirstFamilyName": "Targaryen",
+    "SecondFamilyName": "",
     "nationality": "Valyrian",
     "gender": "male",
     "documentId": "DNI",
@@ -24,7 +25,8 @@
   {
     "_id": "5d7a514b5d2c12c7449be050",
     "name": "Theon",
-    "lastName": "Greyjoy",
+    "FirstFamilyName": "Greyjoy",
+    "SecondFamilyName": "",
     "nationality": "Islander",
     "gender": "male",
     "documentId": "NIE",
@@ -46,7 +48,8 @@
   {
     "_id": "5d7a514b5d2c12c7449be060",
     "name": "Brandon",
-    "lastName": "Stark",
+    "FirstFamilyName": "Stark",
+    "SecondFamilyName": "",
     "nationality": "Northen",
     "gender": "male",
     "documentId": "PASS",
