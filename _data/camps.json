@@ -63,7 +63,7 @@
 		"location": "Italy",
 		"description": "Volunteers recruitment act",
 		"tag": ["urban"],
-		"activities": ["museum", "master class"],
+		"activities": ["museum", "conference"],
 		"address": "Via S. Domenico, 31, 00015 Monterotondo Scalo RM, Italy",
 		"phone": "111-111-1111",
 		"email": "camps@campmanager.com",
@@ -80,9 +80,9 @@
 		"name": "Interniational Law",
 		"edition": "2022",
 		"location": "United Kingdom",
-		"description": "Lecture about international rights focus on refugees",
+		"description": "Seminar about international rights focus on refugees",
 		"tag": ["urban"],
-		"activities": ["lecture", "master class"],
+		"activities": ["seminar", "conference"],
 		"address": "Crescent, Salford M5 4WU, United Kingdom",
 		"phone": "111-111-1111",
 		"email": "camps@campmanager.com",
@@ -213,9 +213,9 @@
 		"name": "Eiffel Tower",
 		"edition": "2022",
 		"location": "France",
-		"description": "Middle East lecture",
+		"description": "Middle East seminar",
 		"tag": ["urban"],
-		"activities": ["museum", "lecture"],
+		"activities": ["museum", "seminar"],
 		"address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France",
 		"phone": "111-111-1111",
 		"email": "camps@campmanager.com",
@@ -234,7 +234,7 @@
 		"location": "Switzerland",
 		"description": "Last conference of the year",
 		"tag": ["mountain"],
-		"activities": ["master class", "reading"],
+		"activities": ["conference", "reading"],
 		"address": "6780 Airolo, Switzerland",
 		"phone": "111-111-1111",
 		"email": "camps@campmanager.com",
@@ -266,3 +266,4 @@
 		"guests": ["Brandon Stark"]
 	}
 ]
+

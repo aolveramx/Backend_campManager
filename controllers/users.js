@@ -1,3 +1,6 @@
+const path = require('path')
+const ErrorResponse = require('../utils/errorResponse')
+const asyncHandler = require('../middleware/async')
 const User = require('../models/User')
 
 /**
@@ -6,77 +9,153 @@ const User = require('../models/User')
  * @access  Private
  * @role    admin
  */
-exports.getUsers = async (req, res, next) => {
-  try {
-    const users = await User.find()
-    res.status(200).json({ sucess: true, count: users.length, data: users })
-  } catch (error) {
-    res.status(400).json({ success: false })
-  }
-}
+exports.getUsers = asyncHandler(async (req, res, next) => {
+  const users = await User.find()
+  res.status(200).json({ sucess: true, count: users.length, data: users })
+})
 
 /**
- * @route   GET api/v1/users/:id
+ * @route   GET api/v1/auth/users
  * @desc    Get single user
  * @access  Private
  * @role    admin
  */
-exports.getUser = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.id)
-    res.status(200).json({ success: true, data: user })
-  } catch (error) {
-    res.status(400).json({ success: false })
-  }
-}
+exports.getUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id)
 
-/**
- * @route   POST api/v1/users
- * @desc    Create a user
- * @access  Public
- * @role    admin/guest/helper
- */
-exports.createUser = async (req, res, next) => {
-  try {
-    const user = await User.create(req.body)
-    res.status(201).json({ success: true, data: user })
-  } catch (error) {
-    res.status(400).json({ success: false })
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+    )
   }
-}
+
+  res.status(200).json({ sucess: true, data: user })
+})
 
 /**
  * @route   PUT api/v1/users/:id
  * @desc    Update user
  * @access  Private
- * @role    admin/guest/helper
+ * @role    admin
  */
-exports.updateUser = async (req, res, next) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    })
+exports.updateUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  })
 
-    if (!user) {
-      return res.status(400).json({ success: false })
-    }
-
-    res.status(200).json({ success: true, data: user })
-  } catch (error) {
-    res.status(400).json({ success: false })
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+    )
   }
-}
+
+  res.status(200).json({ success: true, data: user })
+})
 
 /**
- * @route   UPDATE api/v1/users/:id/photo
- * @desc    Update photo for user
+ * @route   PUT api/v1/users/:id/photo
+ * @desc    Update user photo
  * @access  Private
  * @role    admin/guest/helper
  */
-exports.updateUserPhoto = (req, res, next) => {
-  res.status(200).json({ success: true, msg: 'Actualizar foto de usuario' })
-}
+exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id)
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+    )
+  }
+
+  if (!req.files) {
+    return next(new ErrorResponse(`Upload a photo`, 400))
+  }
+
+  const file = req.files.file
+
+  if (!file.mimetype.startsWith('image')) {
+    return next(new ErrorResponse(`Upload an image file`, 400))
+  }
+
+  if (file.size > process.env.MAX_PHOTO_UPLOAD) {
+    return next(
+      new ErrorResponse(
+        `Upload an image file less than ${process.env.MAX_PHOTO_UPLOAD}`,
+        400
+      )
+    )
+  }
+
+  file.name = `photo_${user._id}${path.parse(file.name).ext}`
+
+  file.mv(`${process.env.USER_PHOTO_UPLOAD}/${file.name}`, async error => {
+    if (error) {
+      console.log(error)
+      return next(new ErrorResponse(`Problem with file upload`, 500))
+    }
+
+    await User.findByIdAndUpdate(req.params.id, { photo: file.name })
+
+    res.status(200).json({
+      success: true,
+      data: file.name,
+    })
+  })
+})
+
+/**
+ * @route   PUT api/v1/users/:id/cv
+ * @desc    Update user curriculum
+ * @access  Private
+ * @role    admin/guest/helper
+ */
+exports.userCvUpload = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id)
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+    )
+  }
+
+  if (!req.files) {
+    return next(new ErrorResponse(`Upload a file`, 400))
+  }
+
+  console.log(req.files)
+
+  const file = req.files.file
+
+  if (!file.mimetype.startsWith('application/pdf')) {
+    return next(new ErrorResponse(`Upload a .PDF file`, 400))
+  }
+
+  if (file.size > process.env.MAX_FILE_UPLOAD) {
+    return next(
+      new ErrorResponse(
+        `Upload a .PDF file less than ${process.env.MAX_FILE_UPLOAD}`,
+        400
+      )
+    )
+  }
+
+  file.name = `CV_${user._id}${path.parse(file.name).ext}`
+
+  file.mv(`${process.env.USER_FILE_UPLOAD}/${file.name}`, async error => {
+    if (error) {
+      console.log(error)
+      return next(new ErrorResponse(`Problem with file upload`, 500))
+    }
+
+    await User.findByIdAndUpdate(req.params.id, { cv: file.name })
+
+    res.status(200).json({
+      success: true,
+      data: file.name,
+    })
+  })
+})
 
 /**
  * @route   DELETE api/v1/users/:id
@@ -84,16 +163,14 @@ exports.updateUserPhoto = (req, res, next) => {
  * @access  Private
  * @role    admin/guest/helper
  */
-exports.deleteUser = async (req, res, next) => {
-  try {
-    const user = await User.findByIdAndDelete(req.params.id)
+exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
+  const user = await User.findByIdAndDelete(req.params.id)
 
-    if (!user) {
-      return res.status(400).json({ success: false })
-    }
-
-    res.status(200).json({ success: true, data: {} })
-  } catch (error) {
-    res.status(400).json({ success: false })
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+    )
   }
-}
+
+  res.status(200).json({ success: true, data: {} })
+})

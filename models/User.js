@@ -1,101 +1,97 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Es necesario agregar un nombre'],
+    required: [true, 'Please add a name'],
     trim: true,
-    maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
+    maxlength: [20, 'Name can not be more than 20 characters'],
   },
   lastName: {
     type: String,
-    required: [true, 'Es necesario agregar un apellido'],
+    required: [true, 'Please add a last name'],
     trim: true,
-    maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
+    maxlength: [30, 'Name can not be more than 30 characters'],
   },
   nationality: {
     type: String,
-    required: [true, 'Es necesario agregar nacionalidad'],
+    required: [true, 'Please add a nationality'],
   },
   gender: {
     type: String,
-    required: [true, 'Es necesario agregar tu género'],
+    required: [true, 'Please add your gender'],
   },
   documentId: {
     type: [String],
-    required: [true, 'Es necesario agregar el tipo de identificación'],
-    enum: [
-      'DNI',
-      'NIE',
-      'PASS'
-    ],
+    required: [true, 'Please add type ID'],
+    enum: ['DNI', 'NIE', 'PASS'],
   },
   idNumber: {
     type: String,
-    required: [true, 'Es necesario agregar el número de identificación'],
-    match: [
-      /^[A-Z0-9]+$/,
-      'Ingresa un Id válido',
-    ],
+    required: [true, 'Please enter ID number'],
+    match: [/^[A-Z0-9]+$/, 'Enter a valid ID'],
   },
   bornDate: {
     type: Date,
-    required: [true, 'Es necesario agregar tu fecha de nacimiento'],
+    required: [true, 'Please add your Birthday'],
   },
-  tutor:String,
+  tutor: String,
   address: {
     type: String,
-    required: [true, 'Es necesario agregar tu dirección'],
+    required: [true, 'Please add an address'],
   },
   phone: {
     type: String,
-    maxlength: [15, 'El número de teléfono no puede ser mayor a 15 caracteres'],
+    maxlength: [15, 'Phone number can not be more than 15 characters'],
   },
   medicalKnowledge: {
     type: Boolean,
-    required: [true, 'Es necesario indicar si cuentas con conocimientos médicos'],
+    required: [
+      true,
+      'It is very important to know if you have medical knowledge',
+    ],
     default: false,
   },
   about: {
     type: String,
-    required: [true, 'Es necesario contar con una breve descripción de tí'],
+    required: [true, 'Please add a personal description'],
   },
   allergies: {
     type: String,
-    required: [true, 'Es importante indicar si tienes alergias'],
+    required: [true, 'It is very important to know if you have allergies'],
   },
   curriculum: String,
   photo: {
     type: String,
-    default: 'default-profile-photo.jpg'
+    default: 'default-profile-photo.jpg',
   },
   username: {
     type: String,
-    required: [true, 'Es obligatorio ingresar un nombre de usuario'],
+    required: [true, 'Please add a username'],
     unique: true,
   },
   email: {
     type: String,
-    required: [true, 'Ingresa un correo electrónico válido'],
+    required: [true, 'Please add an email'],
     unique: true,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Ingresa un correo electrónico válido',
+      'Please add a valid email',
     ],
   },
   role: {
-    type: [String],
+    type: String,
     required: true,
-    enum: [
-      'guest',
-      'helper'
-    ],
-    default: 'guest'
+    enum: ['guest', 'helper'],
+    default: 'guest',
   },
   password: {
     type: String,
-    required: [true, 'Ingresa una contraseña de mínimo 6 caracteres'],
+    required: [true, 'Password must be at leat 6 characters length'],
     minlength: 6,
+    select: false,
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
@@ -104,5 +100,23 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
 })
+
+// Encrypt password
+UserSchema.pre('save', async function (next) {
+  const salt = await bcrypt.genSalt(10)
+  this.password = await bcrypt.hash(this.password, salt)
+})
+
+// Sign JWT and return
+UserSchema.methods.getSignJWtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  })
+}
+
+// Compare user entered password to hashed password in DB
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password)
+}
 
 module.exports = mongoose.model('User', UserSchema)

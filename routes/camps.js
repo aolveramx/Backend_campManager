@@ -1,4 +1,8 @@
 const express = require('express')
+const router = express.Router()
+const filtering = require('../middleware/filtering')
+const { protect, authorize } = require('../middleware/auth')
+const Camp = require('../models/Camp')
 const {
   getCamps,
   getCamp,
@@ -6,17 +10,16 @@ const {
   updateCamp,
   deleteCamp,
 } = require('../controllers/camps')
-const router = express.Router()
 
 router
   .route('/')
-  .get(getCamps)
-  .post(createCamp)
+  .get(filtering(Camp), getCamps)
+  .post(protect, authorize('admin'), createCamp)
 
 router
   .route('/:id')
   .get(getCamp)
-  .put(updateCamp)
-  .delete(deleteCamp)
+  .put(protect, authorize('admin'), updateCamp)
+  .delete(protect, authorize('admin'), deleteCamp)
 
 module.exports = router
