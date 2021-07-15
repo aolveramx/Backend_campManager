@@ -36,6 +36,17 @@ node seeder -d
 
 <br>
 
+#### **Auth:**
+
+| Function                   | Method | Auth      | URL                                                         |
+| -------------------------- | ------ | --------- | ----------------------------------------------------------- |
+| Register user              | POST   | All roles | http://localhost:5000/api/v1/auth/register                  |
+| Login user                 | POST   | All roles | http://localhost:5000/api/v1/auth/login                     |
+| Logout user                | GET    | All roles | http://localhost:5000/api/v1/auth/logout                    |
+| Get current logged in user | GET    | All roles | http://localhost:5000/api/v1/auth/me                        |
+| Forgot Password            | PUT    | All roles | http://localhost:5000/api/v1/auth/forgotpassword            |
+| Reset Password             | PUT    | All roles | http://localhost:5000/api/v1/auth/resetpassword/:resettoken |
+
 #### **Users:**
 
 | Function          | Method | Auth            | URL                                           |
@@ -43,8 +54,8 @@ node seeder -d
 | Get all users     | GET    | admin           | http://localhost:5000/api/v1/users            |
 | Get single user   | GET    | admin           | http://localhost:5000/api/v1/users/\_id       |
 | Update user       | PUT    | admin           | http://localhost:5000/api/v1/users/\_id       |
-| Upload photo      | PUT    | guest or helper | http://localhost:5000/api/v1/users/\_id/photo |
-| Upload CV         | PUT    | guest or helper | http://localhost:5000/api/v1/users/\_id/cv    |
+| Upload photo      | PUT    | All roles       | http://localhost:5000/api/v1/users/\_id/photo |
+| Upload CV         | PUT    | All roles       | http://localhost:5000/api/v1/users/\_id/cv    |
 | Delete my account | DELETE | guest or helper | http://localhost:5000/api/v1/users/\_id       |
 
 <br>
