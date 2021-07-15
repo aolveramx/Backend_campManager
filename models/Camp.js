@@ -56,11 +56,11 @@ const CampSchema = new mongoose.Schema({
     ],
   },
   from: {
-    type: Date,
+    type: Object,
     default: Date.now,
   },
   to: {
-    type: Date,
+    type: Object,
     default: Date.now,
   },
   capacity: {

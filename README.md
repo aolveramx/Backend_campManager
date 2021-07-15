@@ -67,9 +67,9 @@ node seeder -d
 | Filter camps by name                          | http://localhost:5000/api/v1/camps?select=name,edition&sort=-name                   |
 | Filter camps by availability                  | http://localhost:5000/api/v1/camps?available=true                                   |
 | Filter camps by location                      | http://localhost:5000/api/v1/camps?location=Italy                                   |
-| Filter camps by activities                    | http://localhost:5000/api/v1/camps?activities=museo                                 |
-| Filter camps by tag                           | http://localhost:5000/api/v1/camps?tag=playa                                        |
-| Multiple filter (location/activities/tag)     | http://localhost:5000/api/v1/camps?location=Libano&tag=montaña&activities=lectura   |
+| Filter camps by activities                    | http://localhost:5000/api/v1/camps?activities=museum                                |
+| Filter camps by tag                           | http://localhost:5000/api/v1/camps?tag=beach                                        |
+| Multiple filter (location/activities/tag)     | http://localhost:5000/api/v1/camps?location=Lebanon&tag=mountain&activities=reading |
 | Sort camps by name                            | http://localhost:5000/api/v1/camps?select=name&sort=name                            |
 | Filter & sort camps by edition                | http://localhost:5000/api/v1/camps?select=edition&sort=edition                      |
 | Filter & sort camps by name & edition         | http://localhost:5000/api/v1/camps?select=name,edition&sort=-name                   |

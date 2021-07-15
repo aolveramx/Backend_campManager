@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   },
   secondFamilyName: {
     type: String,
-    required: [false, 'Es necesario agregar un apellido'],
+    required: false,
     trim: true,
     maxlength: [30, 'El nombre no puede exceder 30 caracteres'],
   },
