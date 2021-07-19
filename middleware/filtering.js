@@ -1,4 +1,5 @@
 const { queryCapitalized } = require("../utils/StringTransformation")
+const Camps = require('../_data/camps.json')
 
 const filtering = (model) => async (req, res, next) => {
   let query
@@ -18,7 +19,30 @@ const filtering = (model) => async (req, res, next) => {
     const queryTransformed = queryCapitalized(reqQuery)
     let queryStr = JSON.stringify(queryTransformed)
     query = model.find(JSON.parse(queryStr))
+    // if(req.query.location && req.query.name){
+    //   query = Camps.filter(camp => camp.location.includes(queryTransformed.location) && camp.name.includes(queryTransformed.name))
+    // } else if(req.query.location && !req.query.name) {
+    //   query = Camps.filter(camp => camp.location.includes(queryTransformed.location))
+    // } else if(req.query.name && !req.query.location) {
+    //   query = Camps.filter(camp => camp.name.includes(queryTransformed.name))
+    // } else {
+    //   let queryStr = JSON.stringify(queryTransformed)
+    //   query = model.find(JSON.parse(queryStr))
+    // }
   }
+  // if(req.query.location && req.query.name){
+  //   res.body = Camps.filter(camp => camp.location.includes(requestTransformed.location) && camp.name.includes(requestTransformed.name))
+  //   //res.defineProperty(res, res.body.data, Camps.filter(camp => camp.location.includes(requestTransformed.location) && camp.name.includes(requestTransformed.name)))
+  //   res.status(200).json(res.body)
+  // } else if(req.query.name && !req.query.location) {
+  //   res.body=Camps.filter(camp => camp.name.includes(requestTransformed.name))
+  //   res.status(200).json(res.body)
+  // } else if (req.query.location && !req.query.name) {
+  //   res.body=Camps.filter(camp => camp.location.includes(requestTransformed.location))
+  //   res.status(200).json(res.body)
+  // } else {
+  //   res.status(200).json(res.filtering)
+  // }
 
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ')
