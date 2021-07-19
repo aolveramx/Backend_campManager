@@ -24,23 +24,20 @@ let hasBlanckSpace = function(string) {
                 subString5 = subString4.slice(0, blanckSpace3)
                 subString6 = capitalizeFirstLetter(subString4.slice(blanckSpace3))
                 return subString1.concat(' ',subString3,' ',subString5,' ',subString6)
-                //Example: Senderismo En Los Pirineos
+                //Example: Villa Magistral Del Aventino
             } else {
                 return subString1.concat(' ',subString3,' ',subString4)
-                //Example: Aniversario Asistencia Social
+                //Example: Malta Order Summer
             }
         } else {
             return subString1.concat(' ',subString2)
-            //Example: Diplomacia Humanitaria
+            //Example: Humanitarian Diplomacy
         }
     } else {
         return string
     }
 }
 
-let dbRegisterIncludesRequest = function(string) {
-
-}
 
 let queryCapitalized = function(searchObject) {
     if(searchObject.location) {

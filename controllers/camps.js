@@ -1,6 +1,8 @@
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const Camp = require('../models/Camp')
+const Camps = require('../_data/camps.json')
+const { queryCapitalized } = require('../utils/StringTransformation')
 
 /**
  * @route   GET api/v1/camps
@@ -8,7 +10,22 @@ const Camp = require('../models/Camp')
  * @access  Public
  */
 exports.getCamps = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.filtering)
+  const requestTransformed=queryCapitalized(req.query)
+  if(req.query.location && req.query.name){
+    response = Camps.filter(camp => camp.location.includes(requestTransformed.location) && camp.name.includes(requestTransformed.name))
+    res.body = response
+    res.status(200).json(response)
+  } else if(req.query.name && !req.query.location) {
+    response=Camps.filter(camp => camp.name.includes(requestTransformed.name))
+    res.body=response
+    res.status(200).json(response)
+  } else if (req.query.location && !req.query.name) {
+    response=Camps.filter(camp => camp.location.includes(requestTransformed.location))
+    res.body=response
+    res.status(200).json(response)
+  } else {
+    res.status(200).json(res.filtering)
+  }
 }) 
 
 /**
