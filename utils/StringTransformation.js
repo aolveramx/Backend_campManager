@@ -1,9 +1,13 @@
+const moment = require('moment')
+
+//Capitalize fisrt letter the strings
 let capitalizeFirstLetter = function(string) {
     string=string.trim();
     string=string.toLowerCase();
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+//Transformation of string with blanck spaced into a format accepted by DB
 let hasBlanckSpace = function(string) {
     let subString1=''
     let subString2=''
@@ -38,7 +42,6 @@ let hasBlanckSpace = function(string) {
     }
 }
 
-
 let queryCapitalized = function(searchObject) {
     if(searchObject.location) {
         searchObject.location=capitalizeFirstLetter(searchObject.location)
@@ -51,4 +54,37 @@ let queryCapitalized = function(searchObject) {
     return searchObject
 }
 
-module.exports = { queryCapitalized, hasBlanckSpace }
+//Transformation of req.query.from and req.query.to into objects to search into DB
+let datesConversion = function(searchObject) {
+    let from={}
+    let to={}
+    if(searchObject.from) {
+        from = {
+            'year':parseInt(searchObject.from.split('-')[0]), 
+            'month':parseInt(searchObject.from.split('-')[1]),
+            'day':parseInt(searchObject.from.split('-')[2])
+        }
+    } else {
+        from = {
+            'year':parseInt(moment().format('YYYY-MM-DD').split('-')[0]),
+            'month':parseInt(moment().format('YYYY-MM-DD').split('-')[1]),
+            'day':parseInt(moment().format('YYYY-MM-DD').split('-')[2])
+        }
+    }
+    if(searchObject.to) {
+        to = {
+            'year':parseInt(searchObject.to.split('-')[0]),
+            'month':parseInt(searchObject.to.split('-')[1]),
+            'day':parseInt(searchObject.to.split('-')[2])
+        }
+    }/* else {
+        to = {
+            'year':parseInt(moment().add(2,'years').format('YYYY-MM-DD').split('-')[0]),
+            'month':parseInt(moment().add(2,'years').format('YYYY-MM-DD').split('-')[1]),
+            'day':parseInt(moment().add(2,'years').format('YYYY-MM-DD').split('-')[2])
+        }
+    }*/
+    return {from,to}
+}
+
+module.exports = { queryCapitalized, datesConversion }

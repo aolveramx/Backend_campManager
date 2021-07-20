@@ -1,4 +1,4 @@
-const { queryCapitalized } = require("../utils/StringTransformation")
+const { queryCapitalized, datesConversion } = require("../utils/StringTransformation")
 const Camps = require('../_data/camps.json')
 
 const filtering = (model) => async (req, res, next) => {
@@ -9,13 +9,16 @@ const filtering = (model) => async (req, res, next) => {
   const removeFields = ['select', 'sort', 'page', 'limit']
   removeFields.forEach(param => delete reqQuery[param])
  
-  let queryStr = JSON.stringify(reqQuery)
-  queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
-  query = model.find(JSON.parse(queryStr))
+  // let queryStr = JSON.stringify(reqQuery)
+  // queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
+  // query = model.find(JSON.parse(queryStr))
 
   //Request transformations
   if(req.query) {
     const queryTransformed = queryCapitalized(reqQuery)
+    console.log(reqQuery,'reqQuery')
+    const dates = datesConversion(reqQuery)
+    console.log(dates,'dates')
     if(req.query.location && req.query.name){
       let result = {'location':{$in:[]},'name':{$in:[]}}
       data = Camps.filter(camp => camp.location.includes(queryTransformed.location) && camp.name.includes(queryTransformed.name))
@@ -28,7 +31,7 @@ const filtering = (model) => async (req, res, next) => {
         }
       })
       let resultStr = JSON.stringify(result)
-      query=model.find(JSON.parse(resultStr))
+      query = model.find(JSON.parse(resultStr))
 
     } else if(req.query.location && !req.query.name) {
       let result = {'location':{$in:[]}}
@@ -37,7 +40,7 @@ const filtering = (model) => async (req, res, next) => {
         (!result.location.$in.includes(camp.location) ? result.location.$in.push(camp.location) : next)
       })
       let resultStr = JSON.stringify(result)
-      query=model.find(JSON.parse(resultStr))
+      query = model.find(JSON.parse(resultStr))
       
     } else if(req.query.name && !req.query.location) {
       let result = {'name':{$in:[]}}
@@ -46,15 +49,17 @@ const filtering = (model) => async (req, res, next) => {
         (!result.name.$in.includes(camp.name) ? result.name.$in.push(camp.name) : next)
       })
       let resultStr = JSON.stringify(result)
-      query=model.find(JSON.parse(resultStr))
+      query = model.find(JSON.parse(resultStr))
+      
     } else {
-      let queryStr = JSON.stringify(queryTransformed)
-      query = model.find(JSON.parse(queryStr))
+      let resultStr = JSON.stringify(queryTransformed)
+      query = model.find(JSON.parse(resultStr))
     }
   }
 
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ')
+    console.log('query la queryy')
     query = query.select(fields)
   }
 
