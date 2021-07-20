@@ -14,3 +14,7 @@ SMTP_USERNAME=
 SMTP_PASSWORD=
 FROM_NAME=Admin
 FROM_EMAIL=noreply@campmanager.com
+
+
+
+ACTIVITIES=["museum","show","pool","meditation","reading","conference","seminar","crafts workshop","recycling workshop"]
