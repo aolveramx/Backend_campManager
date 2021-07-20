@@ -12,7 +12,6 @@ const filtering = (model) => async (req, res, next) => {
   let queryStr = JSON.stringify(reqQuery)
   queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
   query = model.find(JSON.parse(queryStr))
-  console.log(req.query,'request babe')
 
   //Request transformations
   if(req.query) {
@@ -22,28 +21,35 @@ const filtering = (model) => async (req, res, next) => {
       let result = {'location':{$in:[]},'name':{$in:[]}}
       data = Camps.filter(camp => camp.location.includes(queryTransformed.location) && camp.name.includes(queryTransformed.name))
       data.forEach(camp => {
-        result.location.$in.push(camp.location)
-        result.name.$in.push(camp.name)
+        if(!result.location.$in.includes(camp.location)){
+          result.location.$in.push(camp.location)
+        }
+        if(!result.name.$in.includes(camp.name)){
+          result.name.$in.push(camp.name)
+        }
       })
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
-
     } else if(req.query.location && !req.query.name) {
       let result = {'location':{$in:[]}}
       data = Camps.filter(camp => camp.location.includes(queryTransformed.location))
-      data.forEach(camp => result=Object.assign({'location':camp.location}))
+      data.forEach(camp => {
+        if(!result.location.$in.includes(camp.location)){
+          result.location.$in.push(camp.location)
+        }
+      })
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
-
     } else if(req.query.name && !req.query.location) {
       let result = {'name':{$in:[]}}
       data = Camps.filter(camp => camp.name.includes(queryTransformed.name))
       data.forEach(camp => {
-        result.name.$in.push(camp.name)
+        if(!result.name.$in.includes(camp.name)){
+          result.name.$in.push(camp.name)
+        }
       })
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
-      
     } else {
       let queryStr = JSON.stringify(queryTransformed)
       query = model.find(JSON.parse(queryStr))
