@@ -10,20 +10,7 @@ const { queryCapitalized } = require('../utils/StringTransformation')
  * @access  Public
  */
 exports.getCamps = asyncHandler(async (req, res, next) => {
-  const requestTransformed=queryCapitalized(req.query)
-  if(req.query.location && req.query.name){
-    res.body = Camps.filter(camp => camp.location.includes(requestTransformed.location) && camp.name.includes(requestTransformed.name))
-    res.status(200).json(res.body)
-  } else if(req.query.name && !req.query.location) {
-    res.body=Camps.filter(camp => camp.name.includes(requestTransformed.name))
-    res.status(200).json(res.body)
-  } else if (req.query.location && !req.query.name) {
-    res.body=Camps.filter(camp => camp.location.includes(requestTransformed.location))
-    res.status(200).json(res.body)
-  } else {
-    res.status(200).json(res.filtering)
-  }
-  //res.status(200).json(res.filtering)
+  res.status(200).json(res.filtering)
 }) 
 
 /**

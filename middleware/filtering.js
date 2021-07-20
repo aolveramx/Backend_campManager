@@ -16,19 +16,30 @@ const filtering = (model) => async (req, res, next) => {
 
   //Request transformations
   if(req.query) {
+    //TODO:Cuándo hay un substring que coincide con más de un campamento, sólo me devuelve uno (ej. MALTA) ver condidiones OR en Mongoose para que me devuelva todo
     const queryTransformed = queryCapitalized(reqQuery)
-    let queryStr = JSON.stringify(queryTransformed)
-    query = model.find(JSON.parse(queryStr))
-    // if(req.query.location && req.query.name){
-    //   query = Camps.filter(camp => camp.location.includes(queryTransformed.location) && camp.name.includes(queryTransformed.name))
-    // } else if(req.query.location && !req.query.name) {
-    //   query = Camps.filter(camp => camp.location.includes(queryTransformed.location))
-    // } else if(req.query.name && !req.query.location) {
-    //   query = Camps.filter(camp => camp.name.includes(queryTransformed.name))
-    // } else {
-    //   let queryStr = JSON.stringify(queryTransformed)
-    //   query = model.find(JSON.parse(queryStr))
-    // }
+    let result = {}
+    if(req.query.location && req.query.name){
+      data = Camps.filter(camp => camp.location.includes(queryTransformed.location) && camp.name.includes(queryTransformed.name))
+      data.forEach(camp => result=Object.assign({'location':camp.location, 'name':camp.name}))
+      let resultStr = JSON.stringify(result)
+      query=model.find(JSON.parse(resultStr))
+    } else if(req.query.location && !req.query.name) {
+      data = Camps.filter(camp => camp.location.includes(queryTransformed.location))
+      data.forEach(camp => result=Object.assign({'location':camp.location}))
+      let resultStr = JSON.stringify(result)
+      query=model.find(JSON.parse(resultStr))
+    } else if(req.query.name && !req.query.location) {
+      data = Camps.filter(camp => camp.name.includes(queryTransformed.name))
+      data.forEach(camp => result=Object.assign({'name':camp.name}))
+      //console.log(result,'result')
+      let resultStr = JSON.stringify(result)
+      query=model.find(JSON.parse(resultStr))
+      //console.log(query,'tu quien eres query')
+    } else {
+      let queryStr = JSON.stringify(queryTransformed)
+      query = model.find(JSON.parse(queryStr))
+    }
   }
 
   if (req.query.select) {
