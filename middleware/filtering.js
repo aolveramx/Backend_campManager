@@ -15,7 +15,6 @@ const filtering = (model) => async (req, res, next) => {
 
   //Request transformations
   if(req.query) {
-    //TODO:Cuándo hay un substring que coincide con más de un campamento, sólo me devuelve uno (ej. MALTA) ver condidiones OR en Mongoose para que me devuelva todo
     const queryTransformed = queryCapitalized(reqQuery)
     if(req.query.location && req.query.name){
       let result = {'location':{$in:[]},'name':{$in:[]}}
@@ -30,23 +29,21 @@ const filtering = (model) => async (req, res, next) => {
       })
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
+
     } else if(req.query.location && !req.query.name) {
       let result = {'location':{$in:[]}}
       data = Camps.filter(camp => camp.location.includes(queryTransformed.location))
       data.forEach(camp => {
-        if(!result.location.$in.includes(camp.location)){
-          result.location.$in.push(camp.location)
-        }
+        (!result.location.$in.includes(camp.location) ? result.location.$in.push(camp.location) : next)
       })
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
+      
     } else if(req.query.name && !req.query.location) {
       let result = {'name':{$in:[]}}
       data = Camps.filter(camp => camp.name.includes(queryTransformed.name))
       data.forEach(camp => {
-        if(!result.name.$in.includes(camp.name)){
-          result.name.$in.push(camp.name)
-        }
+        (!result.name.$in.includes(camp.name) ? result.name.$in.push(camp.name) : next)
       })
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
