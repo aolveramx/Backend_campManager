@@ -18,24 +18,32 @@ const filtering = (model) => async (req, res, next) => {
   if(req.query) {
     //TODO:Cuándo hay un substring que coincide con más de un campamento, sólo me devuelve uno (ej. MALTA) ver condidiones OR en Mongoose para que me devuelva todo
     const queryTransformed = queryCapitalized(reqQuery)
-    let result = {}
     if(req.query.location && req.query.name){
+      let result = {'location':{$in:[]},'name':{$in:[]}}
       data = Camps.filter(camp => camp.location.includes(queryTransformed.location) && camp.name.includes(queryTransformed.name))
-      data.forEach(camp => result=Object.assign({'location':camp.location, 'name':camp.name}))
+      data.forEach(camp => {
+        result.location.$in.push(camp.location)
+        result.name.$in.push(camp.name)
+      })
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
+
     } else if(req.query.location && !req.query.name) {
+      let result = {'location':{$in:[]}}
       data = Camps.filter(camp => camp.location.includes(queryTransformed.location))
       data.forEach(camp => result=Object.assign({'location':camp.location}))
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
+
     } else if(req.query.name && !req.query.location) {
+      let result = {'name':{$in:[]}}
       data = Camps.filter(camp => camp.name.includes(queryTransformed.name))
-      data.forEach(camp => result=Object.assign({'name':camp.name}))
-      //console.log(result,'result')
+      data.forEach(camp => {
+        result.name.$in.push(camp.name)
+      })
       let resultStr = JSON.stringify(result)
       query=model.find(JSON.parse(resultStr))
-      //console.log(query,'tu quien eres query')
+      
     } else {
       let queryStr = JSON.stringify(queryTransformed)
       query = model.find(JSON.parse(queryStr))

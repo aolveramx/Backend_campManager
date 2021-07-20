@@ -1,8 +1,6 @@
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const Camp = require('../models/Camp')
-const Camps = require('../_data/camps.json')
-const { queryCapitalized } = require('../utils/StringTransformation')
 
 /**
  * @route   GET api/v1/camps
