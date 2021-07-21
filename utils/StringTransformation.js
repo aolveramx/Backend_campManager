@@ -87,4 +87,12 @@ let datesConversion = function(searchObject) {
     return {from,to}
 }
 
-module.exports = { queryCapitalized, datesConversion }
+let datesStringConversion = function(string) {
+    return dateConverted = {
+        'year':parseInt(string.split('-')[0]), 
+        'month':parseInt(string.split('-')[1]),
+        'day':parseInt(string.split('-')[2])
+    }
+}
+
+module.exports = { queryCapitalized, datesConversion, datesStringConversion }

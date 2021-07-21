@@ -1,8 +1,9 @@
-const { queryCapitalized, datesConversion } = require("../utils/StringTransformation")
+const { queryCapitalized, datesConversion, datesStringConversion } = require("../utils/StringTransformation")
 const Camps = require('../_data/camps.json')
 
 const filtering = (model) => async (req, res, next) => {
   let query
+  let resultStr = ''
 
   // Filtering
   const reqQuery = { ...req.query }
@@ -12,6 +13,7 @@ const filtering = (model) => async (req, res, next) => {
   // let queryStr = JSON.stringify(reqQuery)
   // queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
   // query = model.find(JSON.parse(queryStr))
+
 
   //Request transformations
   if(req.query) {
@@ -30,8 +32,7 @@ const filtering = (model) => async (req, res, next) => {
           result.name.$in.push(camp.name)
         }
       })
-      let resultStr = JSON.stringify(result)
-      query = model.find(JSON.parse(resultStr))
+      resultStr = JSON.stringify(result)
 
     } else if(req.query.location && !req.query.name) {
       let result = {'location':{$in:[]}}
@@ -39,8 +40,7 @@ const filtering = (model) => async (req, res, next) => {
       data.forEach(camp => {
         (!result.location.$in.includes(camp.location) ? result.location.$in.push(camp.location) : next)
       })
-      let resultStr = JSON.stringify(result)
-      query = model.find(JSON.parse(resultStr))
+      resultStr = JSON.stringify(result)
       
     } else if(req.query.name && !req.query.location) {
       let result = {'name':{$in:[]}}
@@ -48,18 +48,59 @@ const filtering = (model) => async (req, res, next) => {
       data.forEach(camp => {
         (!result.name.$in.includes(camp.name) ? result.name.$in.push(camp.name) : next)
       })
-      let resultStr = JSON.stringify(result)
-      query = model.find(JSON.parse(resultStr))
+      resultStr = JSON.stringify(result)
       
     } else {
-      let resultStr = JSON.stringify(queryTransformed)
-      query = model.find(JSON.parse(resultStr))
+      resultStr = JSON.stringify(queryTransformed)
     }
+
+    if(req.query.to){
+      console.log('aunque se que no debooooo')
+      let result1 = []
+      let result2 = []
+      Camps.forEach(camp => {
+        let campDateFrom = datesStringConversion(camp.from)
+        if(campDateFrom.year > dates.from.year){
+          result1.push(camp)
+          next
+        } else if(campDateFrom.year = dates.from.year){
+          if(campDateFrom.month > dates.from.month){
+            result1.push(camp)
+            next
+          }else if(campDateFrom.day >= dates.from.day){
+            result1.push(camp)
+            next
+          }
+        }
+      })
+      Camps.forEach(camp => {
+        let campDateTo = datesStringConversion(camp.to)
+        if(dates.to.year > campDateTo.year){
+          result2.push(camp)
+          next
+        } else if(dates.to.year = campDateTo.year){
+          if(dates.to.month > campDateTo.month){
+            result2.push(camp)
+            next
+          }else if(dates.to.day >= campDateTo.day){
+            result2.push(camp)
+            next
+          }
+        }
+      })
+      const result = []
+      result1.filter(camp => result2.includes(camp) ? result.push(camp) : next);
+      console.log(result)
+    }
+    //TODO - move the logic to other page and only call the function to filter - concat the results with the name and location result to multiple search
+
+    query = model.find(JSON.parse(resultStr))
+    console.log(req.query,'req.query.select')
   }
 
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ')
-    console.log('query la queryy')
+    console.log('Dentro de req.query.select')
     query = query.select(fields)
   }
 
