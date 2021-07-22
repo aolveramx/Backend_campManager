@@ -19,8 +19,8 @@ const filtering = (model) => async (req, res, next) => {
   if(req.query) {
     const queryTransformed = queryCapitalized(reqQuery)
     console.log(reqQuery,'reqQuery')
-    const dates = datesConversion(reqQuery)
-    console.log(dates,'dates')
+    const filterDates = datesConversion(reqQuery)
+    console.log(filterDates,'dates')
     if(req.query.location && req.query.name){
       let result = {'location':{$in:[]},'name':{$in:[]}}
       data = Camps.filter(camp => camp.location.includes(queryTransformed.location) && camp.name.includes(queryTransformed.name))
@@ -55,39 +55,53 @@ const filtering = (model) => async (req, res, next) => {
     }
 
     if(req.query.to){
-      console.log('aunque se que no debooooo')
       let result1 = []
       let result2 = []
       Camps.forEach(camp => {
         let campDateFrom = datesStringConversion(camp.from)
-        if(campDateFrom.year > dates.from.year){
-          result1.push(camp)
+        if(campDateFrom.year < filterDates.from.year) {
           next
-        } else if(campDateFrom.year = dates.from.year){
-          if(campDateFrom.month > dates.from.month){
+        }else if(campDateFrom.year > filterDates.from.year){
+          next
+        } else if(campDateFrom.year = filterDates.from.year){
+          if(campDateFrom.month < filterDates.from.month) {
+            next
+          }else if(campDateFrom.month > filterDates.from.month){
             result1.push(camp)
             next
-          }else if(campDateFrom.day >= dates.from.day){
-            result1.push(camp)
-            next
+            if(campDateFrom.day < filterDates.from.day) {
+              next
+            }else if(campDateFrom.day >= filterDates.from.day){
+              result1.push(camp)
+              next
+            }
           }
         }
       })
+      result1.forEach(camp => console.log(camp.name))
+
       Camps.forEach(camp => {
         let campDateTo = datesStringConversion(camp.to)
-        if(dates.to.year > campDateTo.year){
+        if(filterDates.to.year < campDateTo.year){
+          next
+        }else if(filterDates.to.year > campDateTo.year){
           result2.push(camp)
           next
-        } else if(dates.to.year = campDateTo.year){
-          if(dates.to.month > campDateTo.month){
+        } else if(filterDates.to.year = campDateTo.year){
+          if(filterDates.to.month < campDateTo.month) {
+          } else if(filterDates.to.month > campDateTo.month){
             result2.push(camp)
             next
-          }else if(dates.to.day >= campDateTo.day){
-            result2.push(camp)
-            next
+          }else if(filterDates.to.month = campDateTo.month){
+            if(filterDates.to.day < campDateTo.month){
+            }else if(filterDates.to.day >= campDateTo.day){
+              result2.push(camp)
+              next
+            }
           }
         }
       })
+
       const result = []
       result1.filter(camp => result2.includes(camp) ? result.push(camp) : next);
       console.log(result)
@@ -95,12 +109,10 @@ const filtering = (model) => async (req, res, next) => {
     //TODO - move the logic to other page and only call the function to filter - concat the results with the name and location result to multiple search
 
     query = model.find(JSON.parse(resultStr))
-    console.log(req.query,'req.query.select')
   }
 
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ')
-    console.log('Dentro de req.query.select')
     query = query.select(fields)
   }
 
