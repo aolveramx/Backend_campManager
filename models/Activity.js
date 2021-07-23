@@ -9,14 +9,14 @@ const ActivitySchema = new mongoose.Schema({
     trim: true,
     maxlength: [3, 'Name can not be more than 3 characters'],
   },
-  nameENG: {
+  nameActivityENG: {
     type: String,
     required: [true, 'Please add a english name'],
     unique: true,
     trim: true,
     maxlength: [20, 'Name can not be more than 20 characters'],
   },
-  nameESP: {
+  nameActivityESP: {
     type: String,
     required: [true, 'Por favor agregue un nombre en español'],
     unique: true,
