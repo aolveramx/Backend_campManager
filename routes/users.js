@@ -1,4 +1,6 @@
 const express = require('express')
+const updateUserMiddleware = require('../middleware/updateUser.js')
+const User = require('../_data/users.json')
 const { 
   getUsers, 
   getUser, 
@@ -17,7 +19,7 @@ router
 router
   .route('/:id')
   .get(getUser)
-  .put(updateUser)
+  .put(updateUserMiddleware(User), updateUser)
   .delete(deleteUser)
 
 module.exports = router
