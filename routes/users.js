@@ -1,4 +1,15 @@
 const express = require('express')
+const updateUserMiddleware = require('../middleware/updateUser.js')
+const User = require('../_data/users.json')
+const { 
+  getUsers, 
+  getUser, 
+  createUser, 
+  updateUser, 
+  updateUserPhoto, 
+  deleteUser 
+} = require('../controllers/users')
+
 const router = express.Router()
 const { protect, authorize } = require('../middleware/auth')
 const {
@@ -21,5 +32,6 @@ router
 router.route('/:id/photo').put(userPhotoUpload)
 
 router.route('/:id/cv').put(userCvUpload)
+
 
 module.exports = router

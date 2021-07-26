@@ -19,7 +19,15 @@ const CampSchema = new mongoose.Schema({
   tag: {
     type: [String],
     required: true,
+<<<<<<< HEAD
     enum: ['urban', 'mountain', 'beach'],
+=======
+    enum: [
+      'urban',
+      'mountain',
+      'beach'
+    ]
+>>>>>>> DevJpg-filtering
   },
   activities: {
     type: [String],
@@ -33,8 +41,13 @@ const CampSchema = new mongoose.Schema({
       'conference',
       'seminar',
       'show',
+<<<<<<< HEAD
       'meditation',
     ],
+=======
+      'meditation'
+    ]
+>>>>>>> DevJpg-filtering
   },
   address: {
     type: String,
@@ -52,11 +65,11 @@ const CampSchema = new mongoose.Schema({
     ],
   },
   from: {
-    type: Date,
+    type: {year:Number, month:Number, day:Number},
     default: Date.now,
   },
   to: {
-    type: Date,
+    type: {year:Number, month:Number, day:Number},
     default: Date.now,
   },
   capacity: {
