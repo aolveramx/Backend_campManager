@@ -1,14 +1,14 @@
 const express = require('express')
 const updateUserMiddleware = require('../middleware/updateUser.js')
 const User = require('../_data/users.json')
-const { 
-  getUsers, 
-  getUser, 
-  createUser, 
-  updateUser, 
-  updateUserPhoto, 
-  deleteUser 
-} = require('../controllers/users')
+// const { 
+//   getUsers, 
+//   getUser, 
+//   createUser, 
+//   updateUser, 
+//   updateUserPhoto, 
+//   deleteUser 
+// } = require('../controllers/users')
 
 const router = express.Router()
 const { protect, authorize } = require('../middleware/auth')
