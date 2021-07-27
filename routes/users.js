@@ -1,5 +1,4 @@
 const express = require('express')
-const updateUserMiddleware = require('../middleware/updateUser.js')
 const User = require('../_data/users.json')
 // const { 
 //   getUsers, 
@@ -22,7 +21,7 @@ const {
 } = require('../controllers/users')
 
 router.route('/').get(protect, authorize('admin'), getUsers)
-
+ 
 router
   .route('/:id')
   .get(protect, authorize('admin'), getUser)

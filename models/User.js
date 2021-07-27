@@ -73,7 +73,7 @@ const UserSchema = new mongoose.Schema({
   },
   allergies: {
     type: String,
-    required: [true, 'It is very important to know if you have allergies'],
+    required: [false, 'It is very important to know if you have allergies'],
   },
   curriculum: String,
   photo: {

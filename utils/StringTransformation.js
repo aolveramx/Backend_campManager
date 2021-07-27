@@ -77,6 +77,12 @@ let datesConversion = function(searchObject) {
             'month':parseInt(searchObject.to.split('-')[1]),
             'day':parseInt(searchObject.to.split('-')[2])
         }
+    }else {
+        to = {
+            'year':parseInt(moment().add(2, 'years').format('YYYY-MM-DD').split('-')[0]),
+            'month':parseInt(moment().add(2, 'years').format('YYYY-MM-DD').split('-')[1]),
+            'day':parseInt(moment().add(2, 'years').format('YYYY-MM-DD').split('-')[2])
+        }
     }
     return {from,to}
 }

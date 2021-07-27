@@ -43,7 +43,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     new: true,
     runValidators: true,
   })
-
+  
   if (!user) {
     return next(
       new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
