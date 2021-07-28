@@ -1,13 +1,13 @@
 const express = require('express')
 const User = require('../_data/users.json')
-// const { 
-//   getUsers, 
-//   getUser, 
-//   createUser, 
-//   updateUser, 
-//   updateUserPhoto, 
-//   deleteUser 
-// } = require('../controllers/users')
+//const { 
+//  getUsers, 
+//  getUser, 
+//  createUser, 
+//  updateUser, 
+//  updateUserPhoto, 
+//  deleteUser 
+//} = require('../controllers/users')
 
 const router = express.Router()
 const { protect, authorize } = require('../middleware/auth')
@@ -21,7 +21,7 @@ const {
 } = require('../controllers/users')
 
 router.route('/').get(protect, authorize('admin'), getUsers)
-
+ 
 router
   .route('/:id')
   .get(protect, authorize('admin'), getUser)
