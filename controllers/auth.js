@@ -3,7 +3,6 @@ const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const sendEmail = require('../utils/sendEmail')
 const User = require('../models/User')
-const updateUserInfo = require('../middleware/updateUserInfo')
 
 /**
  * @route   POST api/v1/auth/register
@@ -122,8 +121,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.updateInfo = asyncHandler(async (req, res, next) => {
-  //res.status(200).json({ success: true, msg: 'Update user info' })
-  res.status(200).json(res.updateUserInfo)
+  res.status(200).json({ success: true, msg: 'Update user info' })
 })
 
 /**
