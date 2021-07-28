@@ -71,6 +71,18 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
+  // TODO
+  // Encontrar otra forma de impedir que un usuario modifique la foto de otro. Con este código al entra en el if
+  // req.user lo toma como undefined y me expulsa (borra token) desde Postman
+  //
+  // if(req.user.role === 'helper' || req.user.role === 'guest') {
+  //   if(req.user.role !== req.params.id) {
+  //     return next(
+  //       new ErrorResponse('You are not authorized to delete other users account', 401)
+  //     )
+  //   }
+  // }
+
   if (!user) {
     return next(
       new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
@@ -121,6 +133,18 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
  */
 exports.userCvUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
+
+  // TODO
+  // Encontrar otra forma de impedir que un usuario modifique el CV de otro. Con este código al entra en el if
+  // req.user lo toma como undefined y me expulsa (borra token) desde Postman
+  //
+  // if(req.user.role === 'helper' || req.user.role === 'guest') {
+  //   if(req.user.role !== req.params.id) {
+  //     return next(
+  //       new ErrorResponse('You are not authorized to delete other users account', 401)
+  //     )
+  //   }
+  // }
 
   if (!user) {
     return next(
@@ -174,6 +198,14 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
  */
 exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.id)
+
+  if(req.user.role === 'helper' || req.user.role === 'guest') {
+    if(req.user.role !== req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to delete other users account', 401)
+      )
+    }
+  }
 
   if (!user) {
     return next(

@@ -11,8 +11,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
   // console.log(req.url,'req.url')
   // console.log(req.params.id,'req.params')
   // console.log(req.cookies,'cookies')
-  //console.log(req,'req.host')
-  //console.log(req.user,'req.user')
+  // console.log(req,'req.host')
+  // console.log(req.user,'req.user')
 
   if (
     req.headers.authorization &&
