@@ -2,6 +2,7 @@ const path = require('path')
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
 
 /**
  * @route   GET api/v1/auth/users
@@ -45,7 +46,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   })
   
   if(req.user.role === 'helper' || req.user.role === 'guest') {
-    if(req.user.role !== req.params.id) {
+    if(req.user._id !== req.params.id) {
       return next(
         new ErrorResponse('You are not authorized to modify other users information', 401)
       )
@@ -71,17 +72,15 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
-  // TODO
-  // Encontrar otra forma de impedir que un usuario modifique la foto de otro. Con este código al entra en el if
-  // req.user lo toma como undefined y me expulsa (borra token) desde Postman
-  //
-  // if(req.user.role === 'helper' || req.user.role === 'guest') {
-  //   if(req.user.role !== req.params.id) {
-  //     return next(
-  //       new ErrorResponse('You are not authorized to delete other users account', 401)
-  //     )
-  //   }
-  // }
+  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+  reqUser = await User.findById(decoded.id)
+  if(reqUser.role === 'helper' || reqUser.role === 'guest') {
+    if(reqUser._id !== req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to modify other users photos', 401)
+      )
+    }
+  }
 
   if (!user) {
     return next(
@@ -134,17 +133,15 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
 exports.userCvUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
-  // TODO
-  // Encontrar otra forma de impedir que un usuario modifique el CV de otro. Con este código al entra en el if
-  // req.user lo toma como undefined y me expulsa (borra token) desde Postman
-  //
-  // if(req.user.role === 'helper' || req.user.role === 'guest') {
-  //   if(req.user.role !== req.params.id) {
-  //     return next(
-  //       new ErrorResponse('You are not authorized to delete other users account', 401)
-  //     )
-  //   }
-  // }
+  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+  reqUser = await User.findById(decoded.id)
+  if(reqUser.role === 'helper' || reqUser.role === 'guest') {
+    if(reqUser._id !== req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to delete other users account', 401)
+      )
+    }
+  }
 
   if (!user) {
     return next(
@@ -200,7 +197,7 @@ exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.id)
 
   if(req.user.role === 'helper' || req.user.role === 'guest') {
-    if(req.user.role !== req.params.id) {
+    if(req.user._id !== req.params.id) {
       return next(
         new ErrorResponse('You are not authorized to delete other users account', 401)
       )
