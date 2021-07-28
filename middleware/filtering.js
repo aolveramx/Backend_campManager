@@ -58,55 +58,55 @@ const filtering = (model) => async (req, res, next) => {
     }
 
     // Filtering by dates
-    if(req.query.to){
-      let resultFrom = {'name':{$in:[]}}
-      let resultTo = {'name':{$in:[]}}
+    //if(req.query.to){
+    let resultFrom = {'name':{$in:[]}}
+    let resultTo = {'name':{$in:[]}}
 
-      Camps.forEach(camp => {
-        let campDateFrom = datesStringConversion(camp.from)
-        if(campDateFrom.year < filterDates.from.year) {
+    Camps.forEach(camp => {
+      let campDateFrom = datesStringConversion(camp.from)
+      if(campDateFrom.year < filterDates.from.year) {
+        next
+      }else if(campDateFrom.year > filterDates.from.year){
+        resultFrom.name.$in.push(camp.name)
+        next
+      } else if(campDateFrom.year = filterDates.from.year){
+        if(campDateFrom.month < filterDates.from.month) {
           next
-        }else if(campDateFrom.year > filterDates.from.year){
+        }else if(campDateFrom.month > filterDates.from.month){
           resultFrom.name.$in.push(camp.name)
           next
-        } else if(campDateFrom.year = filterDates.from.year){
-          if(campDateFrom.month < filterDates.from.month) {
+          if(campDateFrom.day < filterDates.from.day) {
             next
-          }else if(campDateFrom.month > filterDates.from.month){
+          }else if(campDateFrom.day >= filterDates.from.day){
             resultFrom.name.$in.push(camp.name)
             next
-            if(campDateFrom.day < filterDates.from.day) {
-              next
-            }else if(campDateFrom.day >= filterDates.from.day){
-              resultFrom.name.$in.push(camp.name)
-              next
-            }
           }
         }
-      })
-      Camps.forEach(camp => {
-        let campDateTo = datesStringConversion(camp.to)
-        if(filterDates.to.year < campDateTo.year){
-          next
-        }else if(filterDates.to.year > campDateTo.year){
+      }
+    })
+    Camps.forEach(camp => {
+      let campDateTo = datesStringConversion(camp.to)
+      if(filterDates.to.year < campDateTo.year){
+        next
+      }else if(filterDates.to.year > campDateTo.year){
+        resultTo.name.$in.push(camp.name)
+        next
+      } else if(filterDates.to.year = campDateTo.year){
+        if(filterDates.to.month < campDateTo.month) {
+        } else if(filterDates.to.month > campDateTo.month){
           resultTo.name.$in.push(camp.name)
           next
-        } else if(filterDates.to.year = campDateTo.year){
-          if(filterDates.to.month < campDateTo.month) {
-          } else if(filterDates.to.month > campDateTo.month){
+        }else if(filterDates.to.month = campDateTo.month){
+          if(filterDates.to.day < campDateTo.month){
+          }else if(filterDates.to.day >= campDateTo.day){
             resultTo.name.$in.push(camp.name)
             next
-          }else if(filterDates.to.month = campDateTo.month){
-            if(filterDates.to.day < campDateTo.month){
-            }else if(filterDates.to.day >= campDateTo.day){
-              resultTo.name.$in.push(camp.name)
-              next
-            }
           }
         }
-      })
-      resultFrom.name.$in.filter(campName => resultTo.name.$in.includes(campName) ? resultDates.name.$in.push(campName) : next);
-    }
+      }
+    })
+    resultFrom.name.$in.filter(campName => resultTo.name.$in.includes(campName) ? resultDates.name.$in.push(campName) : next);
+    //}
 
 
     //resultNameLocation and resultDates comparaisson

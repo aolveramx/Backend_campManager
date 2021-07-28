@@ -25,6 +25,13 @@ connectDB()
 
 // Route files
 const camps = require('./routes/camps')
+const genders = require('./routes/genders')
+const editions = require('./routes/editions')
+const nationalities = require('./routes/nationalities')
+const activities = require('./routes/activities')
+const positions = require('./routes/positions')
+const positionsstaff = require('./routes/positionsstaff')
+
 const auth = require('./routes/auth')
 const users = require('./routes/users')
 
@@ -68,6 +75,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // Mount Routers
 app.use('/api/v1/camps', camps)
+app.use('/api/v1/genders', genders)
+app.use('/api/v1/editions', editions)
+app.use('/api/v1/nationalities', nationalities)
+app.use('/api/v1/activities', activities)
+app.use('/api/v1/positions', positions)
+app.use('/api/v1/positionsstaff', positionsstaff)
 app.use('/api/v1/auth', auth)
 app.use('/api/v1/users', users)
 
