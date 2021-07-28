@@ -1,5 +1,4 @@
 const express = require('express')
-const updateUserMiddleware = require('../middleware/updateUser.js')
 const User = require('../_data/users.json')
 // const { 
 //   getUsers, 
@@ -26,7 +25,7 @@ router.route('/').get(protect, authorize('admin'), getUsers)
 router
   .route('/:id')
   .get(protect, authorize('admin'), getUser)
-  .put(protect, authorize('admin'), updateUser)
+  .put(protect, authorize('admin','helper','guest'), updateUser)
   .delete(protect, deleteMyAccount)
 
 router.route('/:id/photo').put(userPhotoUpload)

@@ -36,13 +36,21 @@ exports.getUser = asyncHandler(async (req, res, next) => {
  * @route   PUT api/v1/users/:id
  * @desc    Update user
  * @access  Private
- * @role    admin
+ * @role    admin/guest/helper
  */
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   })
+  
+  if(req.user.role === 'helper' || req.user.role === 'guest') {
+    if(req.user.role !== req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to modify other users information', 401)
+      )
+    }
+  }
 
   if (!user) {
     return next(
