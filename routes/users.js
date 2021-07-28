@@ -25,7 +25,7 @@ router.route('/').get(protect, authorize('admin'), getUsers)
 router
   .route('/:id')
   .get(protect, authorize('admin'), getUser)
-  .put(protect, authorize('admin'), updateUser)
+  .put(protect, authorize('admin','helper','guest'), updateUser)
   .delete(protect, deleteMyAccount)
 
 router.route('/:id/photo').put(userPhotoUpload)
