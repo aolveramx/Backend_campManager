@@ -31,6 +31,7 @@ const nationalities = require('./routes/nationalities')
 const activities = require('./routes/activities')
 const positions = require('./routes/positions')
 const positionsstaff = require('./routes/positionsstaff')
+const soliccamps = require('./routes/soliccamps')
 
 const auth = require('./routes/auth')
 const users = require('./routes/users')
@@ -83,6 +84,7 @@ app.use('/api/v1/positions', positions)
 app.use('/api/v1/positionsstaff', positionsstaff)
 app.use('/api/v1/auth', auth)
 app.use('/api/v1/users', users)
+app.use('/api/v1/soliccamps', soliccamps)
 
 app.use(errorHandler)
 
