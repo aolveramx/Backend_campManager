@@ -53,7 +53,6 @@ const filtering = (model) => async (req, res, next) => {
       
       //No name and location introduced
     } else {
-
       resultNameLocation = queryTransformed;
     }
 
@@ -171,7 +170,8 @@ const filtering = (model) => async (req, res, next) => {
 
   res.filtering = {
     sucess: true,
-    count: results.length,
+    total,
+    perPage: results.length,
     pagination,
     data: results,
   }
