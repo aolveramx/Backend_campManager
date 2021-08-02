@@ -73,7 +73,15 @@ const CampSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  confirmedHelpers: {
+    type: [String],
+    default: [],
+  },
   guests: {
+    type: [String],
+    default: [],
+  },
+  confirmedGuests: {
     type: [String],
     default: [],
   },
