@@ -147,6 +147,13 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
     // console.log(req.params.id,'req.params.id')
 
     if(camp.helpers.indexOf(reqUser._id) > -1 && reqUser.campsRequested.indexOf(req.params.id) > -1){
+      console.log(camp.guests.indexOf(reqUser._id))
+      console.log(camp.guests,'camp.guests')
+      console.log(reqUser._id,'reqUser._id')
+      console.log(reqUser.campsRequested.indexOf(req.params.id))
+      console.log(reqUser.campsRequested,'reqUser.capsRequested')
+      console.log(req.params.id,'req.params.id')
+      
       await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.splice(camp.helpers.indexOf(reqUser._id), 1) })
       await User.findByIdAndUpdate(reqUser._id, {campsRequested: reqUser.campsRequested.splice(reqUser.campsRequested.indexOf(req.params.id), 1)})
       console.log(camp.helpers.indexOf(reqUser._id))
@@ -173,6 +180,14 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
 
       await Camp.findByIdAndUpdate(req.params.id, { guests: camp.guests.splice(camp.guests.indexOf(reqUser._id), 1) })
       await User.findByIdAndUpdate(reqUser._id, { campsRequested: reqUser.campsRequested.splice(reqUser.campsRequested.indexOf(req.params.id), 1) })
+      
+      console.log(camp.guests.indexOf(reqUser._id))
+      console.log(camp.guests,'camp.guests')
+      console.log(reqUser._id,'reqUser._id')
+      console.log(reqUser.campsRequested.indexOf(req.params.id))
+      console.log(reqUser.campsRequested,'reqUser.capsRequested')
+      console.log(req.params.id,'req.params.id')
+      
       res.status(200).json({ success: true, data: {} })
 
     }else if (camp.confirmedGuests.indexOf(reqUser._id) > -1 && reqUser.campsConfirmed.indexOf(req.params.id) > -1){
