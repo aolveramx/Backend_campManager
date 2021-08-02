@@ -100,7 +100,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
 
   if(reqUser.role === 'helper'){
     if(camp.helpers.includes(reqUser._id) || camp.confirmedHelpers.includes(reqUser._id)){
-      res.status(409).json({ success:false, data:"Camp already requested"})
+      res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
     } else {
       await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.concat(reqUser._id), inPeople: camp.helpers.length} )
       await User.findByIdAndUpdate(reqUser._id, {campsRequested: reqUser.campsRequested.concat(req.params.id)})
@@ -108,7 +108,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
     }
   } else if(reqUser.role === 'guest') {
     if(camp.guests.includes(reqUser._id) || camp.confirmedGuests.includes(reqUser._id)){
-      res.status(409).json({ success:false, data:"Camp already requested"})
+      res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
     } else {
       await Camp.findByIdAndUpdate(req.params.id, {guests: camp.guests.concat(reqUser._id), inPeople: camp.helpers.length} )
       await User.findByIdAndUpdate(reqUser._id, {campsRequested: reqUser.campsRequested.concat(req.params.id)})
@@ -156,6 +156,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       console.log(reqUser.campsRequested,'reqUser.capsRequested')
       console.log(req.params.id,'req.params.id')
       res.status(200).json({ success: true, data:camp.helpers, data:reqUser.campsRequested })
+      
     } else if (camp.confirmedHelpers.indexOf(reqUser._id) > -1 && reqUser.campsConfirmed.indexOf(req.params.id) > -1){
       await Camp.findByIdAndUpdate(req.params.id, {confirmedHelpers: camp.confirmedHelpers.splice(camp.confirmedHelpers.indexOf(reqUser._id), 1) })
       await User.findByIdAndUpdate(reqUser._id, {campsConfirmed: reqUser.campsConfirmed.splice(reqUser.campsConfirmed.indexOf(req.params.id), 1) })
@@ -169,24 +170,18 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       console.log(reqUser.campsRequested.indexOf(req.params.id))
       console.log(reqUser.campsRequested,'reqUser.capsRequested')
       console.log(req.params.id,'req.params.id')
-      const guestsUpdated = camp.guests.splice(camp.guests.indexOf(reqUser._id), 1)
-      const campsUpdated = reqUser.campsRequested.splice(reqUser.campsRequested.indexOf(req.params.id), 1)
-      await Camp.findByIdAndUpdate(req.params.id, { guests: guestsUpdated })
-      await User.findByIdAndUpdate(reqUser._id, { campsRequested: campsUpdated })
-      console.log(camp.guests.indexOf(reqUser._id))
-      console.log(camp.guests,'camp.guests')
-      console.log(reqUser._id,'reqUser._id')
-      console.log(reqUser.campsRequested.indexOf(req.params.id))
-      console.log(reqUser.campsRequested,'reqUser.capsRequested')
-      console.log(req.params.id,'req.params.id')
-      res.status(200).json({ success: true, data:guestsUpdated,campsUpdated })
+
+      await Camp.findByIdAndUpdate(req.params.id, { guests: camp.guests.splice(camp.guests.indexOf(reqUser._id), 1) })
+      await User.findByIdAndUpdate(reqUser._id, { campsRequested: reqUser.campsRequested.splice(reqUser.campsRequested.indexOf(req.params.id), 1) })
+      res.status(200).json({ success: true, data: {} })
+
     }else if (camp.confirmedGuests.indexOf(reqUser._id) > -1 && reqUser.campsConfirmed.indexOf(req.params.id) > -1){
       await Camp.findByIdAndUpdate(req.params.id, {confirmedGuests: camp.confirmedGuests.splice(camp.confirmedGuests.indexOf(reqUser._id), 1) })
       await User.findByIdAndUpdate(reqUser._id, {campsConfirmed: reqUser.campsConfirmed.splice(reqUser.campsConfirmed.indexOf(req.params.id), 1)})
-      res.status(200).json({ success: true, data:reqUser.campsConfirmed, data:camp.confirmedGuests })
+      res.status(200).json({ success: true, data:{} })
     }
-  } else {
-    res.status(200).json({ success: true, data:"something was wrong"})
-  }
+  } //else {
+    //res.status(200).json({ success: true, data:"something was wrong"})
+  //}
 })
 
