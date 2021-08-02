@@ -1,5 +1,28 @@
 [
   {
+    "_id": "5d7a514b5d2c12c7449be030",
+    "name": "Danearys",
+    "firstFamilyName": "Targaryen",
+    "secondFamilyName": "",
+    "nationality": "Valyrian",
+    "gender": "female",
+    "documentId": "DNI",
+    "idNumber": "A1234555",
+    "bornDate": "1980-02-08",
+    "tutor": "",
+    "address": "kings Landing at the red keep",
+    "phone": "111-111-1111",
+    "medicalKnowledge": true,
+    "about": "im the rightfull heir to the iron trhone",
+    "allergies": "",
+    "curriculum": "",
+    "photo": "",
+    "username": "motherDragon",
+    "email": "dragon@gmail.com",
+    "role": "admin",
+    "password": "123456"
+  },
+  {
     "_id": "5d7a514b5d2c12c7449be040",
     "name": "Rhaegar",
     "firstFamilyName": "Targaryen",

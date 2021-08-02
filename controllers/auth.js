@@ -133,7 +133,9 @@ exports.updateInfo = asyncHandler(async (req, res, next) => {
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email })
 
-  if (!user) {
+  if(req.body.email === '') {
+    return next(new ErrorResponse('Email can not be empty'), 404)
+  } else if (!user) {
     return next(new ErrorResponse('There is no user with that email'), 404)
   }
 
