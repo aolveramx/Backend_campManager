@@ -97,7 +97,7 @@ const UserSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ['guest', 'helper'],
+    enum: ['guest', 'helper', 'admin'],
     default: 'guest',
   },
   password: {
