@@ -2,6 +2,7 @@ const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const Camp = require('../models/Camp')
 const User = require('../models/User')
+const SolicCamp = require('../models/SolicCamp')
 const jwt = require('jsonwebtoken')
 
 /**
@@ -90,7 +91,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
   const camp = await Camp.findById(req.params.id)
 
   const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
-  reqUser = await User.findById(decoded.id)
+  const user = await User.findById(decoded.id)
 
   if(!camp) {
     return next(
@@ -98,21 +99,23 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
     )
   }
 
-  if(reqUser.role === 'helper'){
-    if(camp.helpers.includes(reqUser._id) || camp.confirmedHelpers.includes(reqUser._id)){
+  if(user.role === 'helper'){
+    if(camp.helpers.includes(user._id) || camp.confirmedHelpers.includes(user._id)){
       res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
     } else {
-      await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.concat(reqUser._id), inPeople: camp.helpers.length} )
-      await User.findByIdAndUpdate(reqUser._id, {campsRequested: reqUser.campsRequested.concat(req.params.id)})
-      res.status(200).json({ success: true, data:camp.helpers, data:reqUser.campsRequested })
+      await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.concat(user._id), inPeople: camp.helpers.length} )
+      await User.findByIdAndUpdate(user._id, {campsRequested: user.campsRequested.concat(req.params.id)})
+      //await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
+      res.status(200).json({ success: true, data:camp.helpers, data:user.campsRequested })
     }
-  } else if(reqUser.role === 'guest') {
-    if(camp.guests.includes(reqUser._id) || camp.confirmedGuests.includes(reqUser._id)){
+  } else if(user.role === 'guest') {
+    if(camp.guests.includes(user._id) || camp.confirmedGuests.includes(user._id)){
       res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
     } else {
-      await Camp.findByIdAndUpdate(req.params.id, {guests: camp.guests.concat(reqUser._id), inPeople: camp.helpers.length} )
-      await User.findByIdAndUpdate(reqUser._id, {campsRequested: reqUser.campsRequested.concat(req.params.id)})
-      res.status(200).json({ success: true, data:camp.guests, data:reqUser.campsRequested })
+      await Camp.findByIdAndUpdate(req.params.id, {guests: camp.guests.concat(user._id), inPeople: camp.helpers.length} )
+      await User.findByIdAndUpdate(user._id, {campsRequested: user.campsRequested.concat(req.params.id)})
+      //await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
+      res.status(200).json({ success: true, data:camp.guests, data:user.campsRequested })
     }
   
   }
@@ -125,75 +128,81 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
  * @role    helper/guest
  */
  exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
-  const camp = await Camp.findById(req.params.id)
-
   const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
-  reqUser = await User.findById(decoded.id)
+  const userID = decoded.id
+  const user = await User.findOne({ _id: userID})
 
-  //const campNotRequested = camp.helpers.includes(reqUser._id) || camp.confirmedHelpers.includes(reqUser._id) || camp.guests.includes(reqUser._id) || camp.confirmedGuests.includes(reqUser._id)
-  
+  const campID = req.params.id
+  const camp = await Camp.findOne({ _id: campID})
+
   if(!camp) {
+    console.log('campamento sangriento')
     return next(
       new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404)
     )
   }
 
-  if(reqUser.role === 'helper'){
-    // console.log(camp.helpers.indexOf(reqUser._id))
-    // console.log(camp.helpers,'camp.helpers')
-    // console.log(reqUser._id,'reqUser._id')
-    // console.log(reqUser.campsRequested.indexOf(req.params.id))
-    // console.log(reqUser.campsRequested,'reqUser.capsRequested')
-    // console.log(req.params.id,'req.params.id')
+  if(user.role === 'helper'){
+    try{
+      const indexCampHelper = camp.helpers.indexOf(user._id)
+      const indexCampHelperConfirmed = camp.confirmedHelpers.indexOf(user._id)
+      const indexUserRequested = user.campsRequested.indexOf(req.params.id)
+      const indexUserConfirmed = user.campsConfirmed.indexOf(req.params.id)
 
-    if(camp.helpers.indexOf(reqUser._id) > -1 && reqUser.campsRequested.indexOf(req.params.id) > -1){
-      console.log(camp.guests.indexOf(reqUser._id))
-      console.log(camp.guests,'camp.guests')
-      console.log(reqUser._id,'reqUser._id')
-      console.log(reqUser.campsRequested.indexOf(req.params.id))
-      console.log(reqUser.campsRequested,'reqUser.capsRequested')
-      console.log(req.params.id,'req.params.id')
-      
-      await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.splice(camp.helpers.indexOf(reqUser._id), 1) })
-      await User.findByIdAndUpdate(reqUser._id, {campsRequested: reqUser.campsRequested.splice(reqUser.campsRequested.indexOf(req.params.id), 1)})
-      console.log(camp.helpers.indexOf(reqUser._id))
-      console.log(camp.helpers,'camp.guests')
-      console.log(reqUser._id,'reqUser._id')
-      console.log(reqUser.campsRequested.indexOf(req.params.id))
-      console.log(reqUser.campsRequested,'reqUser.capsRequested')
-      console.log(req.params.id,'req.params.id')
-      res.status(200).json({ success: true, data:camp.helpers, data:reqUser.campsRequested })
-      
-    } else if (camp.confirmedHelpers.indexOf(reqUser._id) > -1 && reqUser.campsConfirmed.indexOf(req.params.id) > -1){
-      await Camp.findByIdAndUpdate(req.params.id, {confirmedHelpers: camp.confirmedHelpers.splice(camp.confirmedHelpers.indexOf(reqUser._id), 1) })
-      await User.findByIdAndUpdate(reqUser._id, {campsConfirmed: reqUser.campsConfirmed.splice(reqUser.campsConfirmed.indexOf(req.params.id), 1) })
-      res.status(200).json({ success: true, data:reqUser.campsConfirmed, data: camp.helpers })
-    }
-  } else if(reqUser.role === 'guest') {
-    if(camp.guests.indexOf(reqUser._id) > -1 && reqUser.campsRequested.indexOf(req.params.id) > -1){
-      console.log(camp.guests.indexOf(reqUser._id))
-      console.log(camp.guests,'camp.guests')
-      console.log(reqUser._id,'reqUser._id')
-      console.log(reqUser.campsRequested.indexOf(req.params.id))
-      console.log(reqUser.campsRequested,'reqUser.capsRequested')
-      console.log(req.params.id,'req.params.id')
 
-      await Camp.findByIdAndUpdate(req.params.id, { guests: camp.guests.splice(camp.guests.indexOf(reqUser._id), 1) })
-      await User.findByIdAndUpdate(reqUser._id, { campsRequested: reqUser.campsRequested.splice(reqUser.campsRequested.indexOf(req.params.id), 1) })
-      
-      console.log(camp.guests.indexOf(reqUser._id))
-      console.log(camp.guests,'camp.guests')
-      console.log(reqUser._id,'reqUser._id')
-      console.log(reqUser.campsRequested.indexOf(req.params.id))
-      console.log(reqUser.campsRequested,'reqUser.capsRequested')
-      console.log(req.params.id,'req.params.id')
-      
+      if(indexCampHelper > -1){
+        camp.helpers.splice(indexCampHelper, 1)
+        await camp.save()
+      } else if(indexCampHelperConfirmed > -1){
+        camp.confirmedHelpers.splice(indexCampHelperConfirmed, 1)
+        await camp.save()
+      }
+
+      if(indexUserRequested > -1){
+        user.campsRequested.splice(indexUserRequested, 1)
+        await user.save()
+      } else if(indexUserConfirmed > -1){
+        user.campsConfirmed.splice(indexUserConfirmed, 1)
+        await user.save()
+      }
+
       res.status(200).json({ success: true, data: {} })
 
-    }else if (camp.confirmedGuests.indexOf(reqUser._id) > -1 && reqUser.campsConfirmed.indexOf(req.params.id) > -1){
-      await Camp.findByIdAndUpdate(req.params.id, {confirmedGuests: camp.confirmedGuests.splice(camp.confirmedGuests.indexOf(reqUser._id), 1) })
-      await User.findByIdAndUpdate(reqUser._id, {campsConfirmed: reqUser.campsConfirmed.splice(reqUser.campsConfirmed.indexOf(req.params.id), 1)})
-      res.status(200).json({ success: true, data:{} })
+    } catch(error) {
+      return next(
+        new ErrorResponse(error.message, 404)
+      )
+    }
+
+  } else if(user.role === 'guest') {
+    try{
+      const indexCampGuest = camp.guests.indexOf(user._id)
+      const indexCampGuestConfirmed = camp.confirmedGuests.indexOf(user._id)
+      const indexUserRequested = user.campsRequested.indexOf(req.params.id)
+      const indexUserConfirmed = user.campsConfirmed.indexOf(req.params.id)
+
+      if(indexCampGuest > -1){
+        camp.guests.splice(indexCampGuest, 1)
+        await camp.save()
+      } else if(indexCampGuestConfirmed > -1){
+        camp.confirmedGuests.splice(indexCampGuestConfirmed, 1)
+        await camp.save()
+      }
+
+      if(indexUserRequested > -1){
+        user.campsRequested.splice(indexUserRequested, 1)
+        await user.save()
+      } else if (indexUserConfirmed > -1) {
+        user.campsConfirmed.splice(indexUserConfirmed, 1)
+        await user.save()
+      }
+
+      res.status(200).json({ success: true, data: {} })
+
+    }catch(error){
+      return next(
+        new ErrorResponse(error.message, 404)
+      )
     }
   } //else {
     //res.status(200).json({ success: true, data:"something was wrong"})
