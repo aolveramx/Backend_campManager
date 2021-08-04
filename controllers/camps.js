@@ -166,6 +166,8 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         await user.save()
       }
 
+      //await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
+
       res.status(200).json({ success: true, data: {} })
 
     } catch(error) {
@@ -196,6 +198,8 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         user.campsConfirmed.splice(indexUserConfirmed, 1)
         await user.save()
       }
+
+      //await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
 
       res.status(200).json({ success: true, data: {} })
 
