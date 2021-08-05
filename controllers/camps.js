@@ -120,6 +120,11 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`Currently, there are no vacancies open for the camp: ${camp.name}`, 503)
       )
     }
+    if(camp.confirmedGuests >= camp.confirmedHelpers) {
+      return next(
+        new ErrorResponse(`Currently, there are no helpers availables in camp: ${camp.name}. Please check it again after few days`, 503)
+      )
+    }
 
     if(camp.guests.includes(user._id) || camp.confirmedGuests.includes(user._id)){
       res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
