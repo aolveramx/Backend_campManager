@@ -100,19 +100,31 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
   }
 
   if(user.role === 'helper'){
+    if(camp.confirmedHelpers >= camp.capacity) {
+      return next(
+        new ErrorResponse(`Currently, there are no vacancies open for the camp: ${camp.name}`, 503)
+      )
+    }
+
     if(camp.helpers.includes(user._id) || camp.confirmedHelpers.includes(user._id)){
       res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
     } else {
-      await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.concat(user._id), inPeople: camp.helpers.length} )
+      await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.concat(user._id) } )
       await User.findByIdAndUpdate(user._id, {campsRequested: user.campsRequested.concat(req.params.id)})
       // await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
       res.status(200).json({ success: true, data:camp.helpers, data:user.campsRequested })
     }
   } else if(user.role === 'guest') {
+    if(camp.confirmedGuests >= camp.capacity) {
+      return next(
+        new ErrorResponse(`Currently, there are no vacancies open for the camp: ${camp.name}`, 503)
+      )
+    }
+
     if(camp.guests.includes(user._id) || camp.confirmedGuests.includes(user._id)){
       res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
     } else {
-      await Camp.findByIdAndUpdate(req.params.id, {guests: camp.guests.concat(user._id), inPeople: camp.helpers.length} )
+      await Camp.findByIdAndUpdate(req.params.id, {guests: camp.guests.concat(user._id) } )
       await User.findByIdAndUpdate(user._id, {campsRequested: user.campsRequested.concat(req.params.id)})
       // await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
       res.status(200).json({ success: true, data:camp.guests, data:user.campsRequested })
