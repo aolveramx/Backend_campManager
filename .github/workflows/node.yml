@@ -1,0 +1,45 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create .env file
+        run: |
+          touch .env
+          echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
+          echo PORT=${{ secrets.PORT }} >> .env
+          echo MONGO_URI=${{ secrets.MONGO_URI }} >> .env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo JWT_EXPIRE=${{ secrets.JWT_EXPIRE }} >> .env
+          echo JWT_COOKIE_EXPIRE=${{ secrets.JWT_COOKIE_EXPIRE }} >> .env
+          echo USER_PHOTO_UPLOAD=${{ secrets.USER_PHOTO_UPLOAD }} >> .env
+          echo MAX_PHOTO_UPLOAD=${{ secrets.MAX_PHOTO_UPLOAD }} >> .env
+          echo USER_FILE_UPLOAD=${{ secrets.USER_FILE_UPLOAD }} >> .env
+          echo MAX_FILE_UPLOAD=${{ secrets.MAX_FILE_UPLOAD }} >> .env
+          echo SMTP_HOST=${{ secrets.SMTP_HOST }} >> .env
+          echo SMTP_PORT=${{ secrets.SMTP_PORT }} >> .env
+          echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> .env
+          echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> .env
+          echo FROM_NAME=${{ secrets.FROM_NAME }} >> .env
+          echo FROM_EMAIL=${{ secrets.FROM_EMAIL }} >> .env
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      # - run: npm test
+      - run: sudo systemctl reload supervisor

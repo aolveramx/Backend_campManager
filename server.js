@@ -1,7 +1,7 @@
 // General dependencies
 const path = require('path')
 const express = require('express')
-const dotenv = require('dotenv')
+require('dotenv').config()
 const morgan = require('morgan')
 const colors = require('colors')
 const errorHandler = require('./middleware/error')
@@ -16,9 +16,6 @@ const hpp = require('hpp')
 const cors = require('cors')
 // Connect DB Config
 const connectDB = require('./config/db')
-
-// Load env vars
-dotenv.config({ path: './config/config.env' })
 
 // Connect to DB
 connectDB()
