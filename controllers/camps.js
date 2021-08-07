@@ -111,7 +111,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
     } else {
       await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.concat(user._id) } )
       await User.findByIdAndUpdate(user._id, {campsRequested: user.campsRequested.concat(req.params.id)})
-      // await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
+      await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
       res.status(200).json({ success: true, data:camp.helpers, data:user.campsRequested })
     }
   } else if(user.role === 'guest') {
@@ -131,7 +131,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
     } else {
       await Camp.findByIdAndUpdate(req.params.id, {guests: camp.guests.concat(user._id) } )
       await User.findByIdAndUpdate(user._id, {campsRequested: user.campsRequested.concat(req.params.id)})
-      // await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
+      await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
       res.status(200).json({ success: true, data:camp.guests, data:user.campsRequested })
     }
   
