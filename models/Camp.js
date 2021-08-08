@@ -64,7 +64,10 @@ const CampSchema = new mongoose.Schema({
     type: Number,
     default: 30,
   },
-  inPeople: Number,
+  inPeople: {
+    type: Number,
+    default: 0,
+  },
   available: {
     type: Boolean,
     default: true,
@@ -73,7 +76,15 @@ const CampSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  confirmedHelpers: {
+    type: [String],
+    default: [],
+  },
   guests: {
+    type: [String],
+    default: [],
+  },
+  confirmedGuests: {
     type: [String],
     default: [],
   },
