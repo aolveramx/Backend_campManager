@@ -1,9 +1,7 @@
 const fs = require('fs')
 const mongoose = require('mongoose')
 const color = require('colors')
-const dotenv = require('dotenv')
-
-dotenv.config({ path: './config/config.env'})
+require('dotenv').config()
 
 const Camp =  require('./models/Camp')
 const User =  require('./models/User')
