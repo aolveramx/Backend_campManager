@@ -1,27 +1,6 @@
 [
 	{
-		"_id": "5d7a514b5d2c12c7449be029",
-		"name": "Malta Order Summer",
-		"edition": "2021",
-		"location": "Lebanon",
-		"description": "This is a camp only for women. Focussed on gender and systerhood creation throw different activities in a natural environment. During two weeks all the guest and helpers will enjoy sharing life experiences and workshops",
-		"tag": ["mountain"],
-		"activities": ["recycling workshop", "reading"],
-		"address": "Vanilian Bldg, 6th fl.City Rama Str. Dekwaneh",
-		"phone": "111-111-1111",
-		"email": "camps@campmanager.com",
-		"from": "2021-08-15",
-		"to": "2021-08-31",
-		"capacity": 30,
-		"inPeople": 0,
-    	"available": true,
-		"helpers": ["5d7a514b5d2c12c7449be050"],
-		"confirmedHelpers":[],
-		"guests": ["5d7a514b5d2c12c7449be060"],
-		"confirmedGuests":[]
-	},
-	{
-		"_id": "5d7a514b5d2c12c7449be031",
+		"_id": "5d7a514b5d2c12c7449be002",
 		"name": "Humanitarian Diplomacy",
 		"edition": "2021",
 		"location": "Palestine",
@@ -42,28 +21,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be032",
-		"name": "Social Asistence Aniversary",
-		"edition": "2021",
-		"location": "Italy",
-		"description": "This camp is focussed on the social asistence to person in a vulnerability situation due different causes. The camp will show that people how to develop their habilities and belive in themselves capacities",
-		"tags": ["beach"],
-		"activities": ["pool", "crafts workshop"],
-		"address": "Via Passo Buole, 75/F, 00054 Fiumicino RM",
-		"phone": "111-111-1111",
-		"email": "camps@campmanager.com",
-		"from": "2021-08-01",
-		"to": "2021-08-22",
-		"capacity": 30,
-		"inPeople": 0,
-    	"available": true,
-		"helpers": ["5d7a514b5d2c12c7449be050"],
-		"confirmedHelpers":[],
-		"guests": ["5d7a514b5d2c12c7449be060"],
-		"confirmedGuests":[]
-	},
-	{
-		"_id": "5d7a514b5d2c12c7449be033",
+		"_id": "5d7a514b5d2c12c7449be004",
 		"name": "Villa Magistral Del Aventino",
 		"edition": "2022",
 		"location": "Italy",
@@ -84,7 +42,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be034",
+		"_id": "5d7a514b5d2c12c7449be005",
 		"name": "Interniational Law",
 		"edition": "2022",
 		"location": "United Kingdom",
@@ -105,7 +63,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be035",
+		"_id": "5d7a514b5d2c12c7449be006",
 		"name": "Malta Order's Origins",
 		"edition": "2022",
 		"location": "United Kingdom",
@@ -126,7 +84,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be036",
+		"_id": "5d7a514b5d2c12c7449be007",
 		"name": "Santiago Bernabéu Stadium",
 		"edition": "2021",
 		"location": "Spain",
@@ -147,7 +105,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be037",
+		"_id": "5d7a514b5d2c12c7449be008",
 		"name": "Relax In Sayulita",
 		"edition": "2021",
 		"location": "Mexico",
@@ -168,7 +126,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be038",
+		"_id": "5d7a514b5d2c12c7449be009",
 		"name": "Nevado De Toluca",
 		"edition": "2022",
 		"location": "Mexico",
@@ -189,7 +147,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be039",
+		"_id": "5d7a514b5d2c12c7449be010",
 		"name": "Falkensee",
 		"edition": "2021",
 		"location": "Germany",
@@ -210,7 +168,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be042",
+		"_id": "5d7a514b5d2c12c7449be011",
 		"name": "National Football Museum",
 		"edition": "2021",
 		"location": "United Kingdom",
@@ -231,28 +189,7 @@
 		"confirmedGuests":[]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be040",
-		"name": "Eiffel Tower",
-		"edition": "2022",
-		"location": "France",
-		"description": "Middle East seminar in Paris. France history is very related with middle eastern countries because of the collonization. This camp is focussed on the emancipation and elimination of all non-horizontal links between them",
-		"tag": ["urban"],
-		"activities": ["museum", "seminar"],
-		"address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France",
-		"phone": "111-111-1111",
-		"email": "camps@campmanager.com",
-		"from": "2021-07-01",
-		"to": "2021-07-22",
-		"capacity": 30,
-		"inPeople": 0,
-    	"available": true,
-		"helpers": ["5d7a514b5d2c12c7449be050"],
-		"confirmedHelpers":[],
-		"guests": ["5d7a514b5d2c12c7449be060"],
-		"confirmedGuests":[]
-	},
-	{
-		"_id": "5d7a514b5d2c12c7449be041",
+		"_id": "5d7a514b5d2c12c7449be013",
 		"name": "Cappella Dei Morti",
 		"edition": "2021",
 		"location": "Switzerland",
@@ -273,8 +210,29 @@
 		"confirmedGuests":["5d7a514b5d2c12c7449be090","5d7a514b5d2c12c7449be080"]
 	},
 	{
-		"_id": "5d7a514b5d2c12c7449be043",
+		"_id": "5d7a514b5d2c12c7449be014",
 		"name": "Trekking In Pyrenees",
+		"edition": "2021",
+		"location": "Andorra",
+		"description": "This camp is designed to ensure the relax and confort of our guests and helpers. With the trekking in Pyreness, following routes adapted for people with different habilities, you will enjoy the nature and meet new people who also love this activities",
+		"tag": ["mountain"],
+		"activities": ["conference", "reading", "museum", "seminar"],
+		"address": "Carrer del Puiet 4-6 Bloc A 1er, 4ª, AD300 Ordino, Andorra",
+		"phone": "111-111-1111",
+		"email": "camps@campmanager.com",
+		"from": "2021-12-01",
+		"to": "2021-12-22",
+		"capacity": 30,
+		"inPeople": 0,
+    	"available": true,
+		"helpers": ["5d7a514b5d2c12c7449be050"],
+		"confirmedHelpers":["5d7a514b5d2c12c7449be070"],
+		"guests": ["5d7a514b5d2c12c7449be060"],
+		"confirmedGuests":["5d7a514b5d2c12c7449be090","5d7a514b5d2c12c7449be080"]
+	},
+	{
+		"_id": "5d7a514b5d2c12c7449be015",
+		"name": "Relaxing at mountains",
 		"edition": "2021",
 		"location": "Andorra",
 		"description": "This camp is designed to ensure the relax and confort of our guests and helpers. With the trekking in Pyreness, following routes adapted for people with different habilities, you will enjoy the nature and meet new people who also love this activities",
