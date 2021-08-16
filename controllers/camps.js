@@ -15,6 +15,16 @@ exports.getCamps = asyncHandler(async (req, res, next) => {
 })
 
 /**
+ * @route   GET api/v1/camps/nopagination
+ * @desc    Get all camps with no pagination
+ * @access  Public
+ */
+exports.getCampsNoPagination = asyncHandler(async (req, res, next) => {
+  const camps = await Camp.find()
+  res.status(200).json({success: true, count: camps.length, data: camps})
+})
+
+/**
  * @route   GET api/v1/camps/:id
  * @desc    Get single camp
  * @access  Public

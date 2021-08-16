@@ -6,6 +6,7 @@ const Camp = require('../models/Camp')
 const {
   getCamps,
   getCamp,
+  getCampsNoPagination,
   createCamp,
   updateCamp,
   deleteCamp,
@@ -17,6 +18,10 @@ router
   .route('/')
   .get(filtering(Camp), getCamps)
   .post(protect, authorize('admin'), createCamp)
+
+router
+  .route('/nopagination')
+  .get(getCampsNoPagination)
 
 router
   .route('/:id')
