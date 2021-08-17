@@ -94,9 +94,7 @@ exports.login = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.getMe = asyncHandler(async (req, res, next) => {
-  //const photo = `./public/photos/photo_${req.user.id}.png`
-  const user = await User.findById(req.user.id, photo)
-  //console.log(photo, 'my photo')
+  const user = await User.findById(req.user.id)
 
   res.status(200).json({ success: true, data: user })
 })

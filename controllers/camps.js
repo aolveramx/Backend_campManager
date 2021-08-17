@@ -180,17 +180,23 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       if(indexCampHelper > -1){
         camp.helpers.splice(indexCampHelper, 1)
         await camp.save()
+        await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
+        //await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       } else if(indexCampHelperConfirmed > -1){
         camp.confirmedHelpers.splice(indexCampHelperConfirmed, 1)
         await camp.save()
+        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       }
 
       if(indexUserRequested > -1){
         user.campsRequested.splice(indexUserRequested, 1)
         await user.save()
+        await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
+        //await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       } else if(indexUserConfirmed > -1){
         user.campsConfirmed.splice(indexUserConfirmed, 1)
         await user.save()
+        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       }
 
       res.status(200).json({ success: true, data: {} })
@@ -211,17 +217,23 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       if(indexCampGuest > -1){
         camp.guests.splice(indexCampGuest, 1)
         await camp.save()
+        //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
+        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       } else if(indexCampGuestConfirmed > -1){
         camp.confirmedGuests.splice(indexCampGuestConfirmed, 1)
         await camp.save()
+        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       }
 
       if(indexUserRequested > -1){
         user.campsRequested.splice(indexUserRequested, 1)
         await user.save()
+        //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
+        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       } else if (indexUserConfirmed > -1) {
         user.campsConfirmed.splice(indexUserConfirmed, 1)
         await user.save()
+        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       }
 
       res.status(200).json({ success: true, data: {} })
