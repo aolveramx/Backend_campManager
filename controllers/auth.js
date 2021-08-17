@@ -94,7 +94,9 @@ exports.login = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.getMe = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id)
+  //const photo = `./public/photos/photo_${req.user.id}.png`
+  const user = await User.findById(req.user.id, photo)
+  //console.log(photo, 'my photo')
 
   res.status(200).json({ success: true, data: user })
 })
@@ -121,6 +123,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.updateInfo = asyncHandler(async (req, res, next) => {
+  console.log(req)
   res.status(200).json({ success: true, msg: 'Update user info' })
 })
 
