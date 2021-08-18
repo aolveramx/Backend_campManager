@@ -120,6 +120,7 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: file.name,
+      url: `${req.protocol}://${req.get('host')}/photos/${file.name}`,
     })
   })
 })

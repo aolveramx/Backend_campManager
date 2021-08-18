@@ -10,49 +10,9 @@ const User = require('../models/User')
  * @access  Public
  */
 exports.register = asyncHandler(async (req, res, next) => {
-  const {
-    name,
-    firstFamilyName,
-    secondFamilyName,
-    nationality,
-    gender,
-    documentId,
-    idNumber,
-    bornDate,
-    tutor,
-    address,
-    phone,
-    medicalKnowledge,
-    about,
-    allergies,
-    curriculum,
-    username,
-    email,
-    password,
-    role,
-  } = req.body
-
-  const user = await User.create({
-    name,
-    firstFamilyName,
-    secondFamilyName,
-    nationality,
-    gender,
-    documentId,
-    idNumber,
-    bornDate,
-    tutor,
-    address,
-    phone,
-    medicalKnowledge,
-    about,
-    allergies,
-    curriculum,
-    username,
-    email,
-    password,
-    role,
-  })
+  const user = new User(req.body)
+  const userSaved = await user.save()
+  res.status(201).json({ success: true, data: userSaved })
 
   sendTokenResponse(user, 200, res)
 })
