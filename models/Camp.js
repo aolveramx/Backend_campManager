@@ -89,7 +89,7 @@ const CampSchema = new mongoose.Schema({
     default: [],
   },
   createdAt: {
-    type: {year:Number, month:Number, day:Number},
+    type: Date,
     default: Date.now,
   },
 })

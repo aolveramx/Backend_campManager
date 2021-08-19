@@ -4,6 +4,7 @@ const Camp = require('../models/Camp')
 const User = require('../models/User')
 const SolicCamp = require('../models/SolicCamp')
 const jwt = require('jsonwebtoken')
+const { queryCapitalized, capitalizeFirstLetter } = require('../utils/StringTransformation')
 
 /**
  * @route   GET api/v1/camps
@@ -48,7 +49,12 @@ exports.getCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.createCamp = asyncHandler(async (req, res, next) => {
+  console.log(typeof(capitalizeFirstLetter))
+  req.body.description = capitalizeFirstLetter(req.body.description)
+  req.body.address = capitalizeFirstLetter(req.body.address)
+  queryCapitalized(req.body)
   const camp = await Camp.create(req.body)
+
   res.status(201).json({ success: true, data: camp })
 })
 
