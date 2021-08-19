@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema({
     match: [/^[A-Z0-9]+$/, 'Enter a valid ID'],
   },
   bornDate: {
-    type: Date,
+    type: {year:Number, month:Number, day:Number},
     required: [true, 'Please add your Birthday'],
   },
   tutor: String,
@@ -105,6 +105,14 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Password must be at leat 6 characters length'],
     minlength: 6,
     select: false,
+  },
+  campsRequested:{
+    type: [String],
+    default: [],
+  },
+  campsConfirmed:{
+    type: [String],
+    default: [],
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,

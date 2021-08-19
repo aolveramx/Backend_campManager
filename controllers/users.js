@@ -2,6 +2,7 @@ const path = require('path')
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
 
 /**
  * @route   GET api/v1/auth/users
@@ -36,19 +37,28 @@ exports.getUser = asyncHandler(async (req, res, next) => {
  * @route   PUT api/v1/users/:id
  * @desc    Update user
  * @access  Private
- * @role    admin
+ * @role    admin/guest/helper
  */
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   })
+  
+  if(req.user.role === 'helper' || req.user.role === 'guest') {
+    if(req.user._id !== req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to modify other users information', 401)
+      )
+    }
+  }
 
   if (!user) {
     return next(
       new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
     )
   }
+
 
   res.status(200).json({ success: true, data: user })
 })
@@ -61,6 +71,16 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
  */
 exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
+
+  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+  reqUser = await User.findById(decoded.id)
+  if(reqUser.role === 'helper' || reqUser.role === 'guest') {
+    if(reqUser._id !== req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to modify other users photos', 401)
+      )
+    }
+  }
 
   if (!user) {
     return next(
@@ -100,6 +120,7 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: file.name,
+      url: `${req.protocol}://${req.get('host')}/photos/${file.name}`,
     })
   })
 })
@@ -112,6 +133,16 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
  */
 exports.userCvUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
+
+  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+  reqUser = await User.findById(decoded.id)
+  if(reqUser.role === 'helper' || reqUser.role === 'guest') {
+    if(reqUser._id !== req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to delete other users account', 401)
+      )
+    }
+  }
 
   if (!user) {
     return next(
@@ -165,6 +196,14 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
  */
 exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.id)
+
+  if(req.user.role === 'helper' || req.user.role === 'guest') {
+    if(req.user._id !== req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to delete other users account', 401)
+      )
+    }
+  }
 
   if (!user) {
     return next(

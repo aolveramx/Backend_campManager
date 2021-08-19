@@ -21,7 +21,7 @@ const PositionStaffSchema = new mongoose.Schema({
     required: [true, 'Por favor agregue un nombre en español'],
     unique: true,
     trim: true,
-    maxlength: [20, 'Name can not be more than 20 characters'],
+    maxlength: [20, 'El nombre no puede superar 20 caracteres'],
   }
 })
 

@@ -10,49 +10,9 @@ const User = require('../models/User')
  * @access  Public
  */
 exports.register = asyncHandler(async (req, res, next) => {
-  const {
-    name,
-    firstFamilyName,
-    secondFamilyName,
-    nationality,
-    gender,
-    documentId,
-    idNumber,
-    bornDate,
-    tutor,
-    address,
-    phone,
-    medicalKnowledge,
-    about,
-    allergies,
-    curriculum,
-    username,
-    email,
-    password,
-    role,
-  } = req.body
-
-  const user = await User.create({
-    name,
-    firstFamilyName,
-    secondFamilyName,
-    nationality,
-    gender,
-    documentId,
-    idNumber,
-    bornDate,
-    tutor,
-    address,
-    phone,
-    medicalKnowledge,
-    about,
-    allergies,
-    curriculum,
-    username,
-    email,
-    password,
-    role,
-  })
+  const user = new User(req.body)
+  const userSaved = await user.save()
+  res.status(201).json({ success: true, data: userSaved })
 
   sendTokenResponse(user, 200, res)
 })
@@ -121,6 +81,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.updateInfo = asyncHandler(async (req, res, next) => {
+  console.log(req)
   res.status(200).json({ success: true, msg: 'Update user info' })
 })
 
@@ -133,7 +94,9 @@ exports.updateInfo = asyncHandler(async (req, res, next) => {
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email })
 
-  if (!user) {
+  if(req.body.email === '') {
+    return next(new ErrorResponse('Email can not be empty'), 404)
+  } else if (!user) {
     return next(new ErrorResponse('There is no user with that email'), 404)
   }
 

@@ -7,6 +7,13 @@ const User = require('../models/User')
 exports.protect = asyncHandler(async (req, res, next) => {
   let token
 
+  console.log(req.body,'req.body')
+  console.log(req.url,'req.url')
+  // console.log(req.params.id,'req.params')
+  // console.log(req.cookies,'cookies')
+  // console.log(req,'req.host')
+  // console.log(req.user,'req.user')
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
@@ -19,7 +26,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new ErrorResponse('Not authorized', 401))
+    return next(new ErrorResponse('You are not authorized', 401))
   }
 
   try {
@@ -27,6 +34,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     req.user = await User.findById(decoded.id)
     next()
   } catch (error) {
+    console.log('No estas autorizado a editar este usuario')
     return next(new ErrorResponse('Not authorized', 401))
   }
 })

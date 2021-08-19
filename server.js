@@ -1,7 +1,7 @@
 // General dependencies
 const path = require('path')
 const express = require('express')
-const dotenv = require('dotenv')
+require('dotenv').config()
 const morgan = require('morgan')
 const colors = require('colors')
 const errorHandler = require('./middleware/error')
@@ -17,9 +17,6 @@ const cors = require('cors')
 // Connect DB Config
 const connectDB = require('./config/db')
 
-// Load env vars
-dotenv.config({ path: './config/config.env' })
-
 // Connect to DB
 connectDB()
 
@@ -31,6 +28,7 @@ const nationalities = require('./routes/nationalities')
 const activities = require('./routes/activities')
 const positions = require('./routes/positions')
 const positionsstaff = require('./routes/positionsstaff')
+const soliccamps = require('./routes/soliccamps')
 
 const auth = require('./routes/auth')
 const users = require('./routes/users')
@@ -83,6 +81,7 @@ app.use('/api/v1/positions', positions)
 app.use('/api/v1/positionsstaff', positionsstaff)
 app.use('/api/v1/auth', auth)
 app.use('/api/v1/users', users)
+app.use('/api/v1/soliccamps', soliccamps)
 
 app.use(errorHandler)
 
@@ -95,6 +94,7 @@ app.listen(
     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
   )
 )
+
 
 //Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
