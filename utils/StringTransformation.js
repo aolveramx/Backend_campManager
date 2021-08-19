@@ -95,4 +95,4 @@ let datesStringConversion = function(string) {
     }
 }
 
-module.exports = { queryCapitalized, datesConversion, datesStringConversion }
+module.exports = { capitalizeFirstLetter, queryCapitalized, datesConversion, datesStringConversion }

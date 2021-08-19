@@ -19,7 +19,7 @@ const SolicCampSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ['pending','accepted','rejected'],
+    enum: ['pending','accepted','rejected','cancelled'],
     default: 'pending',
   },
   createdAt: {

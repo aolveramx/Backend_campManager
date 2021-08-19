@@ -14,6 +14,9 @@ const filtering = (model) => async (req, res, next) => {
   // queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
   // query = model.find(JSON.parse(queryStr))
 
+  console.log(req.body,'req.body')
+  console.log(req.query,'req.query')
+  
   //Request transformations
   if(req.query) {
     const queryTransformed = queryCapitalized(reqQuery)

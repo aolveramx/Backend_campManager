@@ -47,7 +47,11 @@ const UserSchema = new mongoose.Schema({
     match: [/^[A-Z0-9]+$/, 'Enter a valid ID'],
   },
   bornDate: {
+<<<<<<< HEAD
    type: {year:Number, month:Number, day:Number},
+=======
+    type: {year:Number, month:Number, day:Number},
+>>>>>>> 004f93400de10fb1c77f5178421779bb3d31047f
     required: [true, 'Please add your Birthday'],
   },
   tutor: String,
@@ -116,6 +120,7 @@ const UserSchema = new mongoose.Schema({
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
+  coments: String,
   createdAt: {
     type: Date,
     default: Date.now,
