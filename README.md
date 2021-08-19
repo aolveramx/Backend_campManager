@@ -74,16 +74,16 @@ node seeder -d
 
 #### **Filtering:**
 
-| Filter                                        | URL                                                                                 |
-| ----------------------------------------------| ------------------------------------------------------------------------------------|
-| Filter camps by name                          | http://localhost:5000/api/v1/camps?select=name,edition&sort=-name                   |
-| Filter camps by availability                  | http://localhost:5000/api/v1/camps?available=true                                   |
-| Filter camps by location                      | http://localhost:5000/api/v1/camps?location=Italy                                   |
-| Filter camps by activities                    | http://localhost:5000/api/v1/camps?activities=museum                                |
-| Filter camps by tag                           | http://localhost:5000/api/v1/camps?tag=beach                                        |
-| Multiple filter (location/activities/tag)     | http://localhost:5000/api/v1/camps?location=Lebanon&tag=mountain&activities=reading |
-| Sort camps by name                            | http://localhost:5000/api/v1/camps?select=name&sort=name                            |
-| Filter & sort camps by edition                | http://localhost:5000/api/v1/camps?select=edition&sort=edition                      |
-| Filter & sort camps by name & edition         | http://localhost:5000/api/v1/camps?select=name,edition&sort=-name                   |
-| Camps pagination                              | http://localhost:5000/api/v1/camps?page=2                                           |
-| Camps pagination & limit                      | http://localhost:5000/api/v1/camps?page=1&limit=2                                   |
+| Filter                                    | URL                                                                                 |
+| ----------------------------------------- | ----------------------------------------------------------------------------------- |
+| Filter camps by name                      | http://localhost:5000/api/v1/camps?select=name,edition&sort=-name                   |
+| Filter camps by availability              | http://localhost:5000/api/v1/camps?available=true                                   |
+| Filter camps by location                  | http://localhost:5000/api/v1/camps?location=Italy                                   |
+| Filter camps by activities                | http://localhost:5000/api/v1/camps?activities=museum                                |
+| Filter camps by tag                       | http://localhost:5000/api/v1/camps?tag=beach                                        |
+| Multiple filter (location/activities/tag) | http://localhost:5000/api/v1/camps?location=Lebanon&tag=mountain&activities=reading |
+| Sort camps by name                        | http://localhost:5000/api/v1/camps?select=name&sort=name                            |
+| Filter & sort camps by edition            | http://localhost:5000/api/v1/camps?select=edition&sort=edition                      |
+| Filter & sort camps by name & edition     | http://localhost:5000/api/v1/camps?select=name,edition&sort=-name                   |
+| Camps pagination                          | http://localhost:5000/api/v1/camps?page=2                                           |
+| Camps pagination & limit                  | http://localhost:5000/api/v1/camps?page=1&limit=2                                   |
