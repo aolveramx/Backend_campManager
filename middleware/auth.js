@@ -7,8 +7,8 @@ const User = require('../models/User')
 exports.protect = asyncHandler(async (req, res, next) => {
   let token
 
-  // console.log(req.headers)
-  // console.log(req.url,'req.url')
+  console.log(req.body,'req.body')
+  console.log(req.url,'req.url')
   // console.log(req.params.id,'req.params')
   // console.log(req.cookies,'cookies')
   // console.log(req,'req.host')
