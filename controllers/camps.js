@@ -1,10 +1,13 @@
-const ErrorResponse = require('../utils/errorResponse')
-const asyncHandler = require('../middleware/async')
-const Camp = require('../models/Camp')
-const User = require('../models/User')
-const SolicCamp = require('../models/SolicCamp')
-const jwt = require('jsonwebtoken')
-const { queryCapitalized, capitalizeFirstLetter } = require('../utils/StringTransformation')
+const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require('../middleware/async');
+const Camp = require('../models/Camp');
+const User = require('../models/User');
+const SolicCamp = require('../models/SolicCamp');
+const jwt = require('jsonwebtoken');
+const {
+  queryCapitalized,
+  capitalizeFirstLetter,
+} = require('../utils/StringTransformation');
 
 /**
  * @route   GET api/v1/camps
@@ -12,8 +15,8 @@ const { queryCapitalized, capitalizeFirstLetter } = require('../utils/StringTran
  * @access  Public
  */
 exports.getCamps = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.filtering)
-})
+  res.status(200).json(res.filtering);
+});
 
 /**
  * @route   GET api/v1/camps/nopagination
@@ -21,9 +24,9 @@ exports.getCamps = asyncHandler(async (req, res, next) => {
  * @access  Public
  */
 exports.getCampsNoPagination = asyncHandler(async (req, res, next) => {
-  const camps = await Camp.find()
-  res.status(200).json({success: true, count: camps.length, data: camps})
-})
+  const camps = await Camp.find();
+  res.status(200).json({ success: true, count: camps.length, data: camps });
+});
 
 /**
  * @route   GET api/v1/camps/:id
@@ -31,16 +34,16 @@ exports.getCampsNoPagination = asyncHandler(async (req, res, next) => {
  * @access  Public
  */
 exports.getCamp = asyncHandler(async (req, res, next) => {
-  const camp = await Camp.findById(req.params.id)
+  const camp = await Camp.findById(req.params.id);
 
   if (!camp) {
     return next(
-      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404)
-    )
+      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404),
+    );
   }
 
-  res.status(200).json({ success: true, data: camp })
-})
+  res.status(200).json({ success: true, data: camp });
+});
 
 /**
  * @route   POST api/v1/camps
@@ -49,14 +52,14 @@ exports.getCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.createCamp = asyncHandler(async (req, res, next) => {
-  console.log(typeof(capitalizeFirstLetter))
-  req.body.description = capitalizeFirstLetter(req.body.description)
-  req.body.address = capitalizeFirstLetter(req.body.address)
-  queryCapitalized(req.body)
-  const camp = await Camp.create(req.body)
+  console.log(typeof capitalizeFirstLetter);
+  req.body.description = capitalizeFirstLetter(req.body.description);
+  req.body.address = capitalizeFirstLetter(req.body.address);
+  queryCapitalized(req.body);
+  const camp = await Camp.create(req.body);
 
-  res.status(201).json({ success: true, data: camp })
-})
+  res.status(201).json({ success: true, data: camp });
+});
 
 /**
  * @route   UPDATE api/v1/camps/:id
@@ -68,16 +71,16 @@ exports.updateCamp = asyncHandler(async (req, res, next) => {
   const camp = await Camp.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
-  })
+  });
 
   if (!camp) {
     return next(
-      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404)
-    )
+      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404),
+    );
   }
 
-  res.status(200).json({ success: true, data: camp })
-})
+  res.status(200).json({ success: true, data: camp });
+});
 
 /**
  * @route   Delete api/v1/camps/:id
@@ -86,16 +89,14 @@ exports.updateCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.deleteCamp = asyncHandler(async (req, res, next) => {
-  const camp = await Camp.findByIdAndDelete(req.params.id)
+  const camp = await Camp.findByIdAndDelete(req.params.id);
 
   if (!camp) {
     return next(
-      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404)
-    )
-  
+      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404),
+    );
   }
-})
-
+});
 
 /**
  * @route   PUT api/v1/camps/:id/subscribeCamp
@@ -104,55 +105,97 @@ exports.deleteCamp = asyncHandler(async (req, res, next) => {
  * @role    helper/guest
  */
 exports.subscribeCamp = asyncHandler(async (req, res, next) => {
-  const camp = await Camp.findById(req.params.id)
+  const camp = await Camp.findById(req.params.id);
+  const token = req.headers.authorization;
+  const index = token.indexOf(' ');
+  const tokenFinal = token.slice(index + 1);
+  const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
+  const user = await User.findById(decoded.id);
 
-  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
-  const user = await User.findById(decoded.id)
-
-  if(!camp) {
+  if (!camp) {
     return next(
-      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404)
-    )
+      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404),
+    );
   }
 
-  if(user.role === 'helper'){
-    if(camp.confirmedHelpers >= camp.capacity) {
+  if (user.role === 'helper') {
+    if (camp.confirmedHelpers >= camp.capacity) {
       return next(
-        new ErrorResponse(`Currently, there are no vacancies open for the camp: ${camp.name}`, 503)
-      )
+        new ErrorResponse(
+          `Currently, there are no vacancies open for the camp: ${camp.name}`,
+          503,
+        ),
+      );
     }
 
-    if(camp.helpers.includes(user._id) || camp.confirmedHelpers.includes(user._id)){
-      res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
+    if (
+      camp.helpers.includes(user._id) ||
+      camp.confirmedHelpers.includes(user._id)
+    ) {
+      res.status(429).json({
+        success: false,
+        data: `You have already requested for the camp: ${camp.name}`,
+      });
     } else {
-      await Camp.findByIdAndUpdate(req.params.id, {helpers: camp.helpers.concat(user._id) } )
-      await User.findByIdAndUpdate(user._id, {campsRequested: user.campsRequested.concat(req.params.id)})
-      await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
-      res.status(200).json({ success: true, data:camp.helpers, data:user.campsRequested })
+      await Camp.findByIdAndUpdate(req.params.id, {
+        helpers: camp.helpers.concat(user._id),
+      });
+      await User.findByIdAndUpdate(user._id, {
+        campsRequested: user.campsRequested.concat(req.params.id),
+      });
+      await SolicCamp.create({
+        camp: req.params.id,
+        person: user._id,
+        role: user.role,
+      });
+      res
+        .status(200)
+        .json({ success: true, data: camp.helpers, data: user.campsRequested });
     }
-  } else if(user.role === 'guest') {
-    if(camp.confirmedGuests >= camp.capacity) {
+  } else if (user.role === 'guest') {
+    if (camp.confirmedGuests >= camp.capacity) {
       return next(
-        new ErrorResponse(`Currently, there are no vacancies open for the camp: ${camp.name}`, 503)
-      )
+        new ErrorResponse(
+          `Currently, there are no vacancies open for the camp: ${camp.name}`,
+          503,
+        ),
+      );
     }
-    if(camp.confirmedGuests >= camp.confirmedHelpers) {
+    if (camp.confirmedGuests >= camp.confirmedHelpers) {
       return next(
-        new ErrorResponse(`Currently, there are no helpers availables in camp: ${camp.name}. Please check it again after few days`, 503)
-      )
+        new ErrorResponse(
+          `Currently, there are no helpers availables in camp: ${camp.name}. Please check it again after few days`,
+          503,
+        ),
+      );
     }
 
-    if(camp.guests.includes(user._id) || camp.confirmedGuests.includes(user._id)){
-      res.status(429).json({ success:false, data:`You have already requested for the camp: ${camp.name}`})
+    if (
+      camp.guests.includes(user._id) ||
+      camp.confirmedGuests.includes(user._id)
+    ) {
+      res.status(429).json({
+        success: false,
+        data: `You have already requested for the camp: ${camp.name}`,
+      });
     } else {
-      await Camp.findByIdAndUpdate(req.params.id, {guests: camp.guests.concat(user._id) } )
-      await User.findByIdAndUpdate(user._id, {campsRequested: user.campsRequested.concat(req.params.id)})
-      await SolicCamp.create({camp: req.params.id, person: user._id, role: user.role})
-      res.status(200).json({ success: true, data:camp.guests, data:user.campsRequested })
+      await Camp.findByIdAndUpdate(req.params.id, {
+        guests: camp.guests.concat(user._id),
+      });
+      await User.findByIdAndUpdate(user._id, {
+        campsRequested: user.campsRequested.concat(req.params.id),
+      });
+      await SolicCamp.create({
+        camp: req.params.id,
+        person: user._id,
+        role: user.role,
+      });
+      res
+        .status(200)
+        .json({ success: true, data: camp.guests, data: user.campsRequested });
     }
-  
   }
-})
+});
 
 /**
  * @route   PUT api/v1/camps/:id/unSubscribeCamp
@@ -160,97 +203,120 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
  * @access  Private
  * @role    helper/guest
  */
- exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
-  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
-  const userID = decoded.id
-  const user = await User.findOne({ _id: userID})
+exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
+  const token = req.headers.authorization;
+  const index = token.indexOf(' ');
+  const tokenFinal = token.slice(index + 1);
+  const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
+  const userID = decoded.id;
+  const user = await User.findOne({ _id: userID });
 
-  const campID = req.params.id
-  const camp = await Camp.findOne({ _id: campID})
+  const campID = req.params.id;
+  const camp = await Camp.findOne({ _id: campID });
 
-  if(!camp) {
-    console.log('campamento sangriento')
+  if (!camp) {
     return next(
-      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404)
-    )
+      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404),
+    );
   }
 
-  if(user.role === 'helper'){
-    try{
-      const indexCampHelper = camp.helpers.indexOf(user._id)
-      const indexCampHelperConfirmed = camp.confirmedHelpers.indexOf(user._id)
-      const indexUserRequested = user.campsRequested.indexOf(req.params.id)
-      const indexUserConfirmed = user.campsConfirmed.indexOf(req.params.id)
+  if (user.role === 'helper') {
+    try {
+      const indexCampHelper = camp.helpers.indexOf(user._id);
+      const indexCampHelperConfirmed = camp.confirmedHelpers.indexOf(user._id);
+      const indexUserRequested = user.campsRequested.indexOf(req.params.id);
+      const indexUserConfirmed = user.campsConfirmed.indexOf(req.params.id);
 
-
-      if(indexCampHelper > -1){
-        camp.helpers.splice(indexCampHelper, 1)
-        await camp.save()
-        await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
+      if (indexCampHelper > -1) {
+        camp.helpers.splice(indexCampHelper, 1);
+        await camp.save();
+        await SolicCamp.findOneAndDelete({
+          camp: req.params.id,
+          person: user._id,
+        });
         //await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
-      } else if(indexCampHelperConfirmed > -1){
-        camp.confirmedHelpers.splice(indexCampHelperConfirmed, 1)
-        await camp.save()
-        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
+      } else if (indexCampHelperConfirmed > -1) {
+        camp.confirmedHelpers.splice(indexCampHelperConfirmed, 1);
+        await camp.save();
+        await SolicCamp.findOneAndUpdate({
+          camp: req.params.id,
+          person: user._id,
+          status: 'cancelled',
+        });
       }
 
-      if(indexUserRequested > -1){
-        user.campsRequested.splice(indexUserRequested, 1)
-        await user.save()
-        await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
+      if (indexUserRequested > -1) {
+        user.campsRequested.splice(indexUserRequested, 1);
+        await user.save();
+        await SolicCamp.findOneAndDelete({
+          camp: req.params.id,
+          person: user._id,
+        });
         //await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
-      } else if(indexUserConfirmed > -1){
-        user.campsConfirmed.splice(indexUserConfirmed, 1)
-        await user.save()
-        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
-      }
-
-      res.status(200).json({ success: true, data: {} })
-
-    } catch(error) {
-      return next(
-        new ErrorResponse(error.message, 404)
-      )
-    }
-
-  } else if(user.role === 'guest') {
-    try{
-      const indexCampGuest = camp.guests.indexOf(user._id)
-      const indexCampGuestConfirmed = camp.confirmedGuests.indexOf(user._id)
-      const indexUserRequested = user.campsRequested.indexOf(req.params.id)
-      const indexUserConfirmed = user.campsConfirmed.indexOf(req.params.id)
-
-      if(indexCampGuest > -1){
-        camp.guests.splice(indexCampGuest, 1)
-        await camp.save()
-        //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
-        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
-      } else if(indexCampGuestConfirmed > -1){
-        camp.confirmedGuests.splice(indexCampGuestConfirmed, 1)
-        await camp.save()
-        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
-      }
-
-      if(indexUserRequested > -1){
-        user.campsRequested.splice(indexUserRequested, 1)
-        await user.save()
-        //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
-        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       } else if (indexUserConfirmed > -1) {
-        user.campsConfirmed.splice(indexUserConfirmed, 1)
-        await user.save()
-        await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
+        user.campsConfirmed.splice(indexUserConfirmed, 1);
+        await user.save();
+        await SolicCamp.findOneAndUpdate({
+          camp: req.params.id,
+          person: user._id,
+          status: 'cancelled',
+        });
       }
 
-      res.status(200).json({ success: true, data: {} })
+      res.status(200).json({ success: true, data: {} });
+    } catch (error) {
+      return next(new ErrorResponse(error.message, 404));
+    }
+  } else if (user.role === 'guest') {
+    try {
+      const indexCampGuest = camp.guests.indexOf(user._id);
+      const indexCampGuestConfirmed = camp.confirmedGuests.indexOf(user._id);
+      const indexUserRequested = user.campsRequested.indexOf(req.params.id);
+      const indexUserConfirmed = user.campsConfirmed.indexOf(req.params.id);
 
-    }catch(error){
-      return next(
-        new ErrorResponse(error.message, 404)
-      )
+      if (indexCampGuest > -1) {
+        camp.guests.splice(indexCampGuest, 1);
+        await camp.save();
+        //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
+        await SolicCamp.findOneAndUpdate({
+          camp: req.params.id,
+          person: user._id,
+          status: 'cancelled',
+        });
+      } else if (indexCampGuestConfirmed > -1) {
+        camp.confirmedGuests.splice(indexCampGuestConfirmed, 1);
+        await camp.save();
+        await SolicCamp.findOneAndUpdate({
+          camp: req.params.id,
+          person: user._id,
+          status: 'cancelled',
+        });
+      }
+
+      if (indexUserRequested > -1) {
+        user.campsRequested.splice(indexUserRequested, 1);
+        await user.save();
+        //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
+        await SolicCamp.findOneAndUpdate({
+          camp: req.params.id,
+          person: user._id,
+          status: 'cancelled',
+        });
+      } else if (indexUserConfirmed > -1) {
+        user.campsConfirmed.splice(indexUserConfirmed, 1);
+        await user.save();
+        await SolicCamp.findOneAndUpdate({
+          camp: req.params.id,
+          person: user._id,
+          status: 'cancelled',
+        });
+      }
+
+      res.status(200).json({ success: true, data: {} });
+    } catch (error) {
+      return next(new ErrorResponse(error.message, 404));
     }
   } //else {
-    //res.status(200).json({ success: true, data:"something was wrong"})
+  //res.status(200).json({ success: true, data:"something was wrong"})
   //}
-})
-
+});
