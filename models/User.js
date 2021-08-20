@@ -1,7 +1,7 @@
-const crypto = require('crypto')
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const crypto = require('crypto');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -47,11 +47,7 @@ const UserSchema = new mongoose.Schema({
     match: [/^[A-Z0-9]+$/, 'Enter a valid ID'],
   },
   bornDate: {
-<<<<<<< HEAD
-   type: {year:Number, month:Number, day:Number},
-=======
-    type: {year:Number, month:Number, day:Number},
->>>>>>> 004f93400de10fb1c77f5178421779bb3d31047f
+    type: { year: Number, month: Number, day: Number },
     required: [true, 'Please add your Birthday'],
   },
   tutor: String,
@@ -110,11 +106,11 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
-  campsRequested:{
+  campsRequested: {
     type: [String],
     default: [],
   },
-  campsConfirmed:{
+  campsConfirmed: {
     type: [String],
     default: [],
   },
@@ -125,41 +121,41 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-})
+});
 
 // Encrypt password
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
-    next()
+    next();
   }
 
-  const salt = await bcrypt.genSalt(10)
-  this.password = await bcrypt.hash(this.password, salt)
-})
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 // Sign JWT and return
 UserSchema.methods.getSignJWtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
-  })
-}
+  });
+};
 
 // Compare user entered password to hashed password in DB
 UserSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password)
-}
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 // Generate and hash password token
 UserSchema.methods.getResetPasswordToken = function () {
-  const resetToken = crypto.randomBytes(20).toString('hex')
+  const resetToken = crypto.randomBytes(20).toString('hex');
   this.resetPasswordToken = crypto
     .createHash('sha256')
     .update(resetToken)
-    .digest('hex')
+    .digest('hex');
 
-  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
-  return resetToken
-}
+  return resetToken;
+};
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('User', UserSchema);
