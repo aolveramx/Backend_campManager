@@ -16,7 +16,10 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -37,7 +40,10 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -58,7 +64,10 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -79,7 +88,10 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -100,7 +112,10 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -121,7 +136,10 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -142,7 +160,12 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050","5d7a514b5d2c12c7449be070"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050",
+			"5d7a514b5d2c12c7449be070",
+			"5d7a514b5d2c12c7449be100"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -163,7 +186,12 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050","5d7a514b5d2c12c7449be070"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050",
+			"5d7a514b5d2c12c7449be070",
+			"5d7a514b5d2c12c7449be100"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -184,7 +212,12 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050","5d7a514b5d2c12c7449be070"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050",
+			"5d7a514b5d2c12c7449be070",
+			"5d7a514b5d2c12c7449be100"
+		],
 		"guests": [],
 		"confirmedGuests":["5d7a514b5d2c12c7449be060"]
 	},
@@ -205,9 +238,17 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050","5d7a514b5d2c12c7449be070"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050",
+			"5d7a514b5d2c12c7449be070",
+			"5d7a514b5d2c12c7449be100"
+		],
 		"guests": [],
-		"confirmedGuests":["5d7a514b5d2c12c7449be060","5d7a514b5d2c12c7449be080"]
+		"confirmedGuests":[
+			"5d7a514b5d2c12c7449be060",
+			"5d7a514b5d2c12c7449be080"
+		]
 	},
 	{
 		"_id": "5d7a514b5d2c12c7449be014",
@@ -226,9 +267,17 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050","5d7a514b5d2c12c7449be070"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050",
+			"5d7a514b5d2c12c7449be070",
+			"5d7a514b5d2c12c7449be100"
+		],
 		"guests": [],
-		"confirmedGuests":["5d7a514b5d2c12c7449be060","5d7a514b5d2c12c7449be080"]
+		"confirmedGuests":[
+			"5d7a514b5d2c12c7449be060",
+			"5d7a514b5d2c12c7449be080"
+		]
 	},
 	{
 		"_id": "5d7a514b5d2c12c7449be015",
@@ -247,9 +296,17 @@
 		"inPeople": 0,
     	"available": true,
 		"helpers": [],
-		"confirmedHelpers":["5d7a514b5d2c12c7449be050","5d7a514b5d2c12c7449be070"],
+		"confirmedHelpers":[
+			"5d7a514b5d2c12c7449be040",
+			"5d7a514b5d2c12c7449be050",
+			"5d7a514b5d2c12c7449be070",
+			"5d7a514b5d2c12c7449be100"
+		],
 		"guests": [],
-		"confirmedGuests":["5d7a514b5d2c12c7449be060","5d7a514b5d2c12c7449be080"]
+		"confirmedGuests":[
+			"5d7a514b5d2c12c7449be060",
+			"5d7a514b5d2c12c7449be080"
+		]
 	}
 ]
 
