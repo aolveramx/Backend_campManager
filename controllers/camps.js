@@ -193,7 +193,9 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       });
       await SolicCamp.create({
         camp: req.params.id,
+        campName: camp.name,
         person: user._id,
+        personName: user.email,
         role: user.role,
       });
       res
