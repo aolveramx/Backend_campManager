@@ -327,4 +327,47 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
   } //else {
   //res.status(200).json({ success: true, data:"something was wrong"})
   //}
+
+});
+
+/**
+ * @route   GET api/v1/camps/:id/solicStatus
+ * @desc    solic status
+ * @access  Private
+ * @role    helper/guest
+ */
+ exports.solicStatus = asyncHandler(async (req, res, next) => {
+
+  //Get UserId with postMan
+  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET) 
+
+  // GET UserId with FrontEnd
+  // const token = req.headers.authorization;
+  // const index = token.indexOf(' ');
+  // const tokenFinal = token.slice(index + 1);
+  // const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
+
+  const userID = decoded.id;
+  const user = await User.findOne({ _id: userID });
+
+  const campID = req.params.id;
+  const camp = await Camp.findOne({ _id: campID });
+
+  if (!camp) {
+    return next(
+      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404),
+    );
+  }
+
+  const solic = await SolicCamp.findOne({ camp: camp.id, person: user.id})
+  console.log(solic)
+
+  if(!solic){
+    return next(
+      new ErrorResponse(`There is not appies fot the camp ${camp.id}`, 404),
+    );
+  }
+
+  res.status(200).json({ sucess: true, data: solic })
+
 });

@@ -2,6 +2,7 @@ const path = require('path')
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const User = require('../models/User')
+const SolicCamp = require('../models/SolicCamp')
 const jwt = require('jsonwebtoken')
 
 /**
@@ -212,4 +213,34 @@ exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({ success: true, data: {} })
+});
+
+/**
+ * @route   GET api/v1/users/:id/solics
+ * @desc    Delete a user
+ * @access  Private
+ * @role    admin/guest/helper
+ */
+ exports.solics = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id)
+
+  if(req.user.role === 'helper' || req.user.role === 'guest') {
+    if(req.user._id != req.params.id) {
+      return next(
+        new ErrorResponse('You are not authorized to read the camps requested by other users', 401)
+      )
+    }
+  }
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+    )
+  }
+
+  const solics = await SolicCamp.find({person:req.params.id})
+  console.log(solics)
+
+  res.status(200).json({ success: true, data: solics })
 })
+

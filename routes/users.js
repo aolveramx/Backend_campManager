@@ -18,6 +18,7 @@ const {
   userPhotoUpload,
   userCvUpload,
   deleteMyAccount,
+  solics,
 } = require('../controllers/users')
 
 router.route('/').get(protect, authorize('admin'), getUsers)
@@ -32,5 +33,7 @@ router.route('/:id/photo').put(userPhotoUpload)
 
 router.route('/:id/cv').put(userCvUpload)
 
+router
+  .route('/:id/solics').get(protect, authorize('helper','guest','admin'), solics)
 
 module.exports = router
