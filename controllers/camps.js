@@ -52,7 +52,6 @@ exports.getCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.createCamp = asyncHandler(async (req, res, next) => {
-  console.log(typeof capitalizeFirstLetter);
   req.body.description = capitalizeFirstLetter(req.body.description);
   req.body.address = capitalizeFirstLetter(req.body.address);
   queryCapitalized(req.body);
@@ -159,7 +158,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         .json({ success: true, data: camp.helpers, data: user.campsRequested });
     }
   } else if (user.role === 'guest') {
-    if (camp.confirmedGuests >= camp.capacity) {
+    if (camp.confirmedGuests.length >= camp.capacity) {
       return next(
         new ErrorResponse(
           `Currently, there are no vacancies open for the camp: ${camp.name}`,
@@ -167,7 +166,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         ),
       );
     }
-    if (camp.confirmedGuests >= camp.confirmedHelpers) {
+    if (camp.confirmedGuests.length >= camp.confirmedHelpers.length) {
       return next(
         new ErrorResponse(
           `Currently, there are no helpers availables in camp: ${camp.name}. Please check it again after few days`,
@@ -193,7 +192,9 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       });
       await SolicCamp.create({
         camp: req.params.id,
+        campName: camp.name,
         person: user._id,
+        personName: user.email,
         role: user.role,
       });
       res
