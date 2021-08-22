@@ -30,17 +30,6 @@ exports.getSolicCamp = asyncHandler(async (req, res, next) => {
 })
 
 /**
- * @route   POST api/v1/soliccamps
- * @desc    Add new soliccamp
- * @access  Private
- * @role    admin
- */
-exports.createSolicCamp = asyncHandler(async (req, res, next) => {
-  const soliccamp = await SolicCamp.create(req.body)
-  res.status(201).json({ success: true, data: soliccamp })
-})
-
-/**
  * @route   UPDATE api/v1/soliccamps/:id
  * @desc    Update new soliccamp
  * @access  Private

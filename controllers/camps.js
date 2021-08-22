@@ -149,7 +149,9 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       });
       await SolicCamp.create({
         camp: req.params.id,
+        campName: camp.name,
         person: user._id,
+        personName: user.email,
         role: user.role,
       });
       res
@@ -360,7 +362,6 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
   }
 
   const solic = await SolicCamp.findOne({ camp: camp.id, person: user.id})
-  console.log(solic)
 
   if(!solic){
     return next(

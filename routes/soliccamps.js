@@ -6,7 +6,6 @@ const SolicCamp = require('../models/SolicCamp')
 const {
   getSolicCamps,
   getSolicCamp,
-  createSolicCamp,
   updateSolicCamp,
   deleteSolicCamp,
 } = require('../controllers/soliccamps')
@@ -14,7 +13,6 @@ const {
 router
   .route('/')
   .get(protect, authorize('admin'), filtering(SolicCamp), getSolicCamps)
-  .post(protect, authorize('guest','helper','admin'), createSolicCamp)
 
 router
   .route('/:id')
