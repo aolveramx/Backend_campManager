@@ -106,6 +106,10 @@ exports.deleteCamp = asyncHandler(async (req, res, next) => {
  */
 exports.subscribeCamp = asyncHandler(async (req, res, next) => {
   const camp = await Camp.findById(req.params.id);
+
+  //Get UserId with postMan
+  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+
   const token = req.headers.authorization;
   const index = token.indexOf(' ');
   const tokenFinal = token.slice(index + 1);
@@ -204,6 +208,10 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
  * @role    helper/guest
  */
 exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
+
+  //Get UserId with postMan
+  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+
   const token = req.headers.authorization;
   const index = token.indexOf(' ');
   const tokenFinal = token.slice(index + 1);
