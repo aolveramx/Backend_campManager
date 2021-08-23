@@ -104,10 +104,12 @@ exports.updateSolicCamp = asyncHandler(async (req, res, next) => {
 
     if(index > -1){
       user.campsRequested.splice(index,1)
-      const userUpdated = await User.findByIdAndUpdate(user.id, {campsRequested: user.campsRequested})
+      user.campsRejected.push(soliccamp.camp)
+      const userUpdated = await User.findByIdAndUpdate(user.id, {campsRequested: user.campsRequested, campsRejected: user.campsRejected})
     } else if(index4 > -1){
       user.campsConfirmed.splice(index4,1)
-      const userUpdated = await User.findByIdAndUpdate(user.id, {campsConfirmed: user.campsConfirmed})
+      user.campsRejected.push(soliccamp.camp)
+      const userUpdated = await User.findByIdAndUpdate(user.id, {campsConfirmed: user.campsConfirmed, campsRejected: user.campsRejected})
     }
     else {
       next(
