@@ -47,11 +47,7 @@ const UserSchema = new mongoose.Schema({
     match: [/^[A-Z0-9]+$/, 'Enter a valid ID'],
   },
   bornDate: {
-<<<<<<< HEAD
-    type: {year:Number, month:Number, day:Number},
-=======
     type: { year: Number, month: Number, day: Number },
->>>>>>> 1ddb040255d5a15c63556a0abed3059046ff5b8b
     required: [true, 'Please add your Birthday'],
   },
   tutor: String,
