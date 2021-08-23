@@ -6,7 +6,17 @@ const SolicCampSchema = new mongoose.Schema({
     required: true,
     trim: true,
   }, 
+  campName: {
+    type: String,
+    required: true,
+    trim: true,
+  }, 
   person: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  personName: {
     type: String,
     required: true,
     trim: true,

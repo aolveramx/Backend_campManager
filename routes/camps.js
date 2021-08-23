@@ -12,6 +12,7 @@ const {
   deleteCamp,
   subscribeCamp,
   unsubscribeCamp,
+  solicStatus,
 } = require('../controllers/camps')
 
 router
@@ -36,4 +37,8 @@ router
 router
   .route('/:id/unsubscribe')
   .put(protect, authorize('guest','helper'), unsubscribeCamp)
+
+router
+  .route('/:id/solicStatus')
+  .get(protect, authorize('guest','helper'), solicStatus)
 module.exports = router

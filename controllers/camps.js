@@ -52,7 +52,6 @@ exports.getCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.createCamp = asyncHandler(async (req, res, next) => {
-  console.log(typeof capitalizeFirstLetter);
   req.body.description = capitalizeFirstLetter(req.body.description);
   req.body.address = capitalizeFirstLetter(req.body.address);
   queryCapitalized(req.body);
@@ -106,6 +105,10 @@ exports.deleteCamp = asyncHandler(async (req, res, next) => {
  */
 exports.subscribeCamp = asyncHandler(async (req, res, next) => {
   const camp = await Camp.findById(req.params.id);
+
+  //Get UserId with postMan
+  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+
   const token = req.headers.authorization;
   const index = token.indexOf(' ');
   const tokenFinal = token.slice(index + 1);
@@ -145,7 +148,9 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       });
       await SolicCamp.create({
         camp: req.params.id,
+        campName: camp.name,
         person: user._id,
+        personName: user.email,
         role: user.role,
       });
       res
@@ -153,7 +158,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         .json({ success: true, data: camp.helpers, data: user.campsRequested });
     }
   } else if (user.role === 'guest') {
-    if (camp.confirmedGuests >= camp.capacity) {
+    if (camp.confirmedGuests.length >= camp.capacity) {
       return next(
         new ErrorResponse(
           `Currently, there are no vacancies open for the camp: ${camp.name}`,
@@ -161,7 +166,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         ),
       );
     }
-    if (camp.confirmedGuests >= camp.confirmedHelpers) {
+    if (camp.confirmedGuests.length >= camp.confirmedHelpers.length) {
       return next(
         new ErrorResponse(
           `Currently, there are no helpers availables in camp: ${camp.name}. Please check it again after few days`,
@@ -187,7 +192,9 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
       });
       await SolicCamp.create({
         camp: req.params.id,
+        campName: camp.name,
         person: user._id,
+        personName: user.email,
         role: user.role,
       });
       res
@@ -204,6 +211,10 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
  * @role    helper/guest
  */
 exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
+
+  //Get UserId with postMan
+  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+
   const token = req.headers.authorization;
   const index = token.indexOf(' ');
   const tokenFinal = token.slice(index + 1);
@@ -247,6 +258,7 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
 
       if (indexUserRequested > -1) {
         user.campsRequested.splice(indexUserRequested, 1);
+        user.campsRejected.push(req.params.id)
         await user.save();
         await SolicCamp.findOneAndDelete({
           camp: req.params.id,
@@ -255,6 +267,7 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
         //await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       } else if (indexUserConfirmed > -1) {
         user.campsConfirmed.splice(indexUserConfirmed, 1);
+        user.campsRejected.push(req.params.id)
         await user.save();
         await SolicCamp.findOneAndUpdate({
           camp: req.params.id,
@@ -295,6 +308,7 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
 
       if (indexUserRequested > -1) {
         user.campsRequested.splice(indexUserRequested, 1);
+        user.campsRejected.push(req.params.id)
         await user.save();
         //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
         await SolicCamp.findOneAndUpdate({
@@ -304,6 +318,7 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
         });
       } else if (indexUserConfirmed > -1) {
         user.campsConfirmed.splice(indexUserConfirmed, 1);
+        user.campsRejected.push(req.params.id)
         await user.save();
         await SolicCamp.findOneAndUpdate({
           camp: req.params.id,
@@ -319,4 +334,46 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
   } //else {
   //res.status(200).json({ success: true, data:"something was wrong"})
   //}
+
+});
+
+/**
+ * @route   GET api/v1/camps/:id/solicStatus
+ * @desc    solic status
+ * @access  Private
+ * @role    helper/guest
+ */
+ exports.solicStatus = asyncHandler(async (req, res, next) => {
+
+  //Get UserId with postMan
+  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET) 
+
+  // GET UserId with FrontEnd
+  // const token = req.headers.authorization;
+  // const index = token.indexOf(' ');
+  // const tokenFinal = token.slice(index + 1);
+  // const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
+
+  const userID = decoded.id;
+  const user = await User.findOne({ _id: userID });
+
+  const campID = req.params.id;
+  const camp = await Camp.findOne({ _id: campID });
+
+  if (!camp) {
+    return next(
+      new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404),
+    );
+  }
+
+  const solic = await SolicCamp.findOne({ camp: camp.id, person: user.id})
+
+  if(!solic){
+    return next(
+      new ErrorResponse(`There is not appies fot the camp ${camp.id}`, 404),
+    );
+  }
+
+  res.status(200).json({ sucess: true, data: solic })
+
 });
