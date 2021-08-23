@@ -73,7 +73,15 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
-  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+  //Get UserId with postMan
+  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET) 
+
+  // GET UserId with FrontEnd
+  const token = req.headers.authorization;
+  const index = token.indexOf(' ');
+  const tokenFinal = token.slice(index + 1);
+  const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
+
   reqUser = await User.findById(decoded.id)
   if(reqUser.role === 'helper' || reqUser.role === 'guest') {
     if(reqUser._id !== req.params.id) {
@@ -135,7 +143,15 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
 exports.userCvUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
-  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+  //Get UserId with postMan
+  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET) 
+
+  // GET UserId with FrontEnd
+  const token = req.headers.authorization;
+  const index = token.indexOf(' ');
+  const tokenFinal = token.slice(index + 1);
+  const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
+
   reqUser = await User.findById(decoded.id)
   if(reqUser.role === 'helper' || reqUser.role === 'guest') {
     if(reqUser._id !== req.params.id) {
