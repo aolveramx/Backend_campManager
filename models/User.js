@@ -110,6 +110,10 @@ const UserSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  campsRejected: {
+    type: [String],
+    default: [],
+  },
   campsConfirmed: {
     type: [String],
     default: [],

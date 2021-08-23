@@ -52,7 +52,6 @@ exports.getCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.createCamp = asyncHandler(async (req, res, next) => {
-  console.log(typeof capitalizeFirstLetter);
   req.body.description = capitalizeFirstLetter(req.body.description);
   req.body.address = capitalizeFirstLetter(req.body.address);
   queryCapitalized(req.body);
@@ -159,7 +158,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         .json({ success: true, data: camp.helpers, data: user.campsRequested });
     }
   } else if (user.role === 'guest') {
-    if (camp.confirmedGuests >= camp.capacity) {
+    if (camp.confirmedGuests.length >= camp.capacity) {
       return next(
         new ErrorResponse(
           `Currently, there are no vacancies open for the camp: ${camp.name}`,
@@ -167,7 +166,7 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
         ),
       );
     }
-    if (camp.confirmedGuests >= camp.confirmedHelpers) {
+    if (camp.confirmedGuests.length >= camp.confirmedHelpers.length) {
       return next(
         new ErrorResponse(
           `Currently, there are no helpers availables in camp: ${camp.name}. Please check it again after few days`,
@@ -259,6 +258,7 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
 
       if (indexUserRequested > -1) {
         user.campsRequested.splice(indexUserRequested, 1);
+        user.campsRejected.push(req.params.id)
         await user.save();
         await SolicCamp.findOneAndDelete({
           camp: req.params.id,
@@ -267,6 +267,7 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
         //await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       } else if (indexUserConfirmed > -1) {
         user.campsConfirmed.splice(indexUserConfirmed, 1);
+        user.campsRejected.push(req.params.id)
         await user.save();
         await SolicCamp.findOneAndUpdate({
           camp: req.params.id,
@@ -307,6 +308,7 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
 
       if (indexUserRequested > -1) {
         user.campsRequested.splice(indexUserRequested, 1);
+        user.campsRejected.push(req.params.id)
         await user.save();
         //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
         await SolicCamp.findOneAndUpdate({
@@ -316,6 +318,7 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
         });
       } else if (indexUserConfirmed > -1) {
         user.campsConfirmed.splice(indexUserConfirmed, 1);
+        user.campsRejected.push(req.params.id)
         await user.save();
         await SolicCamp.findOneAndUpdate({
           camp: req.params.id,
