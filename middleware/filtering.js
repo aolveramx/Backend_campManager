@@ -30,15 +30,12 @@ const filtering = (model) => async (req, res, next) => {
     if(req.query.location && req.query.name){
       resultNameLocation = {'location':{$in:[]},'name':{$in:[]}}
       data = camps.filter(camp => camp.location.includes(queryTransformed.location) && camp.name.includes(queryTransformed.name))
-      // console.log(data,'data')
       data.forEach(camp => {
         if(!resultNameLocation.location.$in.includes(camp.location)){
           resultNameLocation.location.$in.push(camp.location)
-          // console.log(resultNameLocation,'resultNameLocation')
         }
         if(!resultNameLocation.name.$in.includes(camp.name)){
           resultNameLocation.name.$in.push(camp.name)
-          // console.log(resultNameLocation)
         }
       })
 
@@ -54,12 +51,9 @@ const filtering = (model) => async (req, res, next) => {
     } else if(req.query.name && !req.query.location) {
       resultNameLocation = {'name':{$in:[]}}
       data = camps.filter(camp => camp.name.includes(queryTransformed.name))
-      // console.log(data)
-      // console.log(typeof(camps))
       data.forEach(camp => {
         (!resultNameLocation.name.$in.includes(camp.name) ? resultNameLocation.name.$in.push(camp.name) : next)
       })
-      // console.log(resultNameLocation, 'resultNameLocation')
       
       //No name and location introduced
     } else {
@@ -84,9 +78,10 @@ const filtering = (model) => async (req, res, next) => {
         }else if(campDateFrom.month > filterDates.from.month){
           resultFrom.name.$in.push(camp.name)
           next
+        }else if(campDateFrom.month = filterDates.from.month){
           if(campDateFrom.day < filterDates.from.day) {
             next
-          }else if(campDateFrom.day >= filterDates.from.day){
+          }else if(campDateFrom.day >= filterDates.from.day) {
             resultFrom.name.$in.push(camp.name)
             next
           }
@@ -102,11 +97,13 @@ const filtering = (model) => async (req, res, next) => {
         next
       } else if(filterDates.to.year = campDateTo.year){
         if(filterDates.to.month < campDateTo.month) {
+          next
         } else if(filterDates.to.month > campDateTo.month){
           resultTo.name.$in.push(camp.name)
           next
         }else if(filterDates.to.month = campDateTo.month){
           if(filterDates.to.day < campDateTo.month){
+            next
           }else if(filterDates.to.day >= campDateTo.day){
             resultTo.name.$in.push(camp.name)
             next
@@ -115,9 +112,6 @@ const filtering = (model) => async (req, res, next) => {
       }
     })
     resultFrom.name.$in.filter(campName => resultTo.name.$in.includes(campName) ? resultDates.name.$in.push(campName) : next);
-    // console.log(resultFrom,'resultFrom')
-    // console.group(resultTo,'resultTo')
-    // console.log(resultDates,'resultDates en su creación')
     //}
 
 
@@ -125,28 +119,17 @@ const filtering = (model) => async (req, res, next) => {
     if(!resultNameLocation.name && !resultNameLocation.location){
       result=resultDates
     } else if(resultNameLocation.location && resultNameLocation.name){
-      //console.removeFields('tra')
       result={'name':{$in:[]},'location':{$in:resultNameLocation.location.$in}}
       resultNameLocation.name.$in.filter(campName => resultDates.name.$in.includes(campName) ? result.name.$in.push(campName) : next)
     } else if(!resultNameLocation.location && resultNameLocation.name){
-      //console.log('tre')
       result={'name':{$in:[]}}
-    //   console.log(resultNameLocation,'resultNameLocation')
-    //   console.log(resultDates.name.$in.includes('La Casa De Manolo'))
-    //   console.log(result.name.$in)
     resultNameLocation.name.$in.filter(campName => resultDates.name.$in.includes(campName) ? result.name.$in.push(campName) : console.log(campName,'campname',typeof(campName)))
-    //   console.log(resultNameLocation)
-    //   console.log(result)
     } else if(resultNameLocation.location && !resultNameLocation.name){
-    //   console.log('tri')
       result={'name':{$in:resultDates.name.$in},'location':{$in:resultNameLocation.location.$in}}
     }
 
-    //console.log(result,'result')
-
     //Query generation
     resultStr = JSON.stringify(result)
-    // console.log(resultStr)
     query = model.find(JSON.parse(resultStr))
   }
 
