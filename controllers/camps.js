@@ -3,11 +3,11 @@ const asyncHandler = require('../middleware/async');
 const Camp = require('../models/Camp');
 const User = require('../models/User');
 const SolicCamp = require('../models/SolicCamp');
-const jwt = require('jsonwebtoken');
 const {
   queryCapitalized,
   capitalizeFirstLetter,
 } = require('../utils/StringTransformation');
+const { tokenDecoder } = require('../utils/TokenDecoder');
 
 /**
  * @route   GET api/v1/camps
@@ -106,14 +106,8 @@ exports.deleteCamp = asyncHandler(async (req, res, next) => {
 exports.subscribeCamp = asyncHandler(async (req, res, next) => {
   const camp = await Camp.findById(req.params.id);
 
-  //Get UserId with postMan
-  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
-
-  const token = req.headers.authorization;
-  const index = token.indexOf(' ');
-  const tokenFinal = token.slice(index + 1);
-  const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
-  const user = await User.findById(decoded.id);
+  const tokenDecoded = tokenDecoder(req);
+  const user = await User.findById(tokenDecoded.id);
 
   if (!camp) {
     return next(
@@ -212,15 +206,8 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
  */
 exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
 
-  //Get UserId with postMan
-  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
-
-  const token = req.headers.authorization;
-  const index = token.indexOf(' ');
-  const tokenFinal = token.slice(index + 1);
-  const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
-  const userID = decoded.id;
-  const user = await User.findOne({ _id: userID });
+  const tokenDecoded = tokenDecoder(req);
+  const user = await User.findOne({ _id: tokenDecoded.id });
 
   const campID = req.params.id;
   const camp = await Camp.findOne({ _id: campID });
@@ -345,17 +332,8 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
  */
  exports.solicStatus = asyncHandler(async (req, res, next) => {
 
-  //Get UserId with postMan
-  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET) 
-
-  // GET UserId with FrontEnd
-  // const token = req.headers.authorization;
-  // const index = token.indexOf(' ');
-  // const tokenFinal = token.slice(index + 1);
-  // const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
-
-  const userID = decoded.id;
-  const user = await User.findOne({ _id: userID });
+  const tokenDecoded = tokenDecoder(req);
+  const user = await User.findOne({ _id: tokenDecoded.id });
 
   const campID = req.params.id;
   const camp = await Camp.findOne({ _id: campID });

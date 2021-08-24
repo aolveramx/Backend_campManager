@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const User = require('../models/User')
 const SolicCamp = require('../models/SolicCamp')
-const jwt = require('jsonwebtoken')
+const { tokenDecoder } = require('../utils/TokenDecoder');
 
 /**
  * @route   GET api/v1/auth/users
@@ -73,16 +73,9 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
-  //Get UserId with postMan
-  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET) 
+  const tokenDecoded = tokenDecoder(req);
+  const reqUser = await User.findById(tokenDecoded.id);
 
-  // GET UserId with FrontEnd
-  const token = req.headers.authorization;
-  const index = token.indexOf(' ');
-  const tokenFinal = token.slice(index + 1);
-  const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
-
-  reqUser = await User.findById(decoded.id)
   if(reqUser.role === 'helper' || reqUser.role === 'guest') {
     if(reqUser._id !== req.params.id) {
       return next(
@@ -143,16 +136,9 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
 exports.userCvUpload = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id)
 
-  //Get UserId with postMan
-  //const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET) 
+  const tokenDecoded = tokenDecoder(req);
+  const reqUser = await User.findById(tokenDecoded.id);
 
-  // GET UserId with FrontEnd
-  const token = req.headers.authorization;
-  const index = token.indexOf(' ');
-  const tokenFinal = token.slice(index + 1);
-  const decoded = jwt.verify(tokenFinal, process.env.JWT_SECRET);
-
-  reqUser = await User.findById(decoded.id)
   if(reqUser.role === 'helper' || reqUser.role === 'guest') {
     if(reqUser._id !== req.params.id) {
       return next(
@@ -212,8 +198,7 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
-  const user = await User.findByIdAndDelete(req.params.id)
-
+  
   if(req.user.role === 'helper' || req.user.role === 'guest') {
     if(req.user._id !== req.params.id) {
       return next(
@@ -221,6 +206,8 @@ exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
       )
     }
   }
+
+  const user = await User.findByIdAndDelete(req.params.id)
 
   if (!user) {
     return next(
