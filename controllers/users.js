@@ -47,7 +47,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   })
   
   if(req.user.role === 'helper' || req.user.role === 'guest') {
-    if(req.user._id !== req.params.id) {
+    if(req.user._id != req.params.id) {
       return next(
         new ErrorResponse('You are not authorized to modify other users information', 401)
       )
@@ -71,6 +71,8 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
+  console.log(req.query,'req.query')
+  console.log(req.files,'req.files')
   const user = await User.findById(req.params.id)
 
   const tokenDecoded = tokenDecoder(req);
