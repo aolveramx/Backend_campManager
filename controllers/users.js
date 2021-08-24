@@ -75,9 +75,10 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
 
   const tokenDecoded = tokenDecoder(req);
   const reqUser = await User.findById(tokenDecoded.id);
+  console.log(req.files)
 
   if(reqUser.role === 'helper' || reqUser.role === 'guest') {
-    if(reqUser._id !== req.params.id) {
+    if(reqUser._id != req.params.id) {
       return next(
         new ErrorResponse('You are not authorized to modify other users photos', 401)
       )
@@ -140,7 +141,7 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
   const reqUser = await User.findById(tokenDecoded.id);
 
   if(reqUser.role === 'helper' || reqUser.role === 'guest') {
-    if(reqUser._id !== req.params.id) {
+      if(reqUser._id != req.params.id) {
       return next(
         new ErrorResponse('You are not authorized to delete other users account', 401)
       )

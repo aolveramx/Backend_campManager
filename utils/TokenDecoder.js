@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken');
 
 let tokenDecoder = function(req) {
+    //Postman
     if(req.cookies.token){
         const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
         return decoded
+    //Front
     }else if(req.headers.authorization) {
         const token = req.headers.authorization
         const index = token.indexOf(' ')
