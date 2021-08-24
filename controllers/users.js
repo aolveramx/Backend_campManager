@@ -75,7 +75,7 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
 
   const tokenDecoded = tokenDecoder(req);
   const reqUser = await User.findById(tokenDecoded.id);
-  console.log(req.files)
+
 
   if(reqUser.role === 'helper' || reqUser.role === 'guest') {
     if(reqUser._id != req.params.id) {
