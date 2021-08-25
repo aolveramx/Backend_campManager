@@ -11,7 +11,17 @@ const Camp = require('../models/Camp')
  */
 exports.getSolicCamps = asyncHandler(async (req, res, next) => {
   const solics = await SolicCamp.find()
-  res.status(200).json({ sucess: true, count: solics.length, data: solics })
+  const data = [[],[],[]]
+  solics.forEach(solic => {
+    if(solic.status == 'pending'){
+      data[0].push(solic)
+    }else if(solic.status == 'accepted'){
+      data[1].push(solic)
+    }else{
+      data[2].push(solic)
+    }
+  })
+  res.status(200).json({ sucess: true, count: solics.length, data: data })
 })
 
 /**

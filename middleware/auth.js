@@ -7,13 +7,6 @@ const User = require('../models/User')
 exports.protect = asyncHandler(async (req, res, next) => {
   let token
 
-  console.log(req.body,'req.body')
-  console.log(req.url,'req.url')
-  // console.log(req.params.id,'req.params')
-  // console.log(req.cookies,'cookies')
-  // console.log(req,'req.host')
-  // console.log(req.user,'req.user')
-
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')

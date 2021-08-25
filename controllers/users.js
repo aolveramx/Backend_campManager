@@ -71,8 +71,6 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
-  console.log(req.query,'req.query')
-  console.log(req.files,'req.files')
   const user = await User.findById(req.params.id)
 
   const tokenDecoded = tokenDecoder(req);
@@ -99,8 +97,8 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
 
   const file = req.files.file
 
-  if (!file.mimetype.startsWith('image')) {
-    return next(new ErrorResponse(`Upload an image file`, 400))
+  if (!(file.mimetype.startsWith('image/png') || file.mimetype.startsWith('image/jpg') || file.mimetype.startsWith('image/jpeg'))) {
+    return next(new ErrorResponse(`Upload a .jpg, .jpeg or .png image`, 400))
   }
 
   if (file.size > process.env.MAX_PHOTO_UPLOAD) {
@@ -159,8 +157,6 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
   if (!req.files) {
     return next(new ErrorResponse(`Upload a file`, 400))
   }
-
-  console.log(req.files)
 
   const file = req.files.file
 
