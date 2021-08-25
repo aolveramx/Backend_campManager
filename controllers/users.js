@@ -118,7 +118,8 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(`Problem with file upload`, 500))
     }
 
-    await User.findByIdAndUpdate(req.params.id, { photo: file.name })
+    user.photo= file.name
+    await user.save()
 
     res.status(200).json({
       success: true,
@@ -143,7 +144,7 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
   if(reqUser.role === 'helper' || reqUser.role === 'guest') {
       if(reqUser._id != req.params.id) {
       return next(
-        new ErrorResponse('You are not authorized to delete other users account', 401)
+        new ErrorResponse('You are not authorized to edit other users account', 401)
       )
     }
   }
@@ -181,7 +182,8 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(`Problem with file upload`, 500))
     }
 
-    await User.findByIdAndUpdate(req.params.id, { cv: file.name })
+    user.curriculum= file.name
+    await user.save()
 
     res.status(200).json({
       success: true,
