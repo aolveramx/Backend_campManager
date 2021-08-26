@@ -32,6 +32,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   // check for user
   const user = await User.findOne({ email }).select('+password')
+  const role = user.role
 
   if (!user) {
     return next(new ErrorResponse('Invalid credentials'), 401)
@@ -44,7 +45,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid credentials'), 401)
   }
 
-  sendTokenResponse(user, 200, res)
+  sendTokenResponse(user, role, 200, res)
 })
 
 /**
@@ -153,7 +154,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 })
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = (user, role, statusCode, res) => {
   // Create user with method lowercase not a static uppercase
   const token = user.getSignJWtToken()
 
@@ -171,5 +172,6 @@ const sendTokenResponse = (user, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({
     success: true,
     token,
+    role
   })
 }
