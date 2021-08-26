@@ -234,8 +234,9 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
         });
         //await SolicCamp.findOneAndUpdate({camp: req.params.id, person: user._id, status:'cancelled'})
       } else if (indexCampHelperConfirmed > -1) {
-        camp.confirmedHelpers.splice(indexCampHelperConfirmed, 1);
-        await camp.save();
+        camp.confirmedHelpers.splice(indexCampHelperConfirmed, 1)
+        camp.rejectedHelpers.push(user._id)
+        await camp.save()
         await SolicCamp.findOneAndUpdate({
           camp: req.params.id,
           person: user._id,
@@ -245,7 +246,6 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
 
       if (indexUserRequested > -1) {
         user.campsRequested.splice(indexUserRequested, 1);
-        user.campsRejected.push(req.params.id)
         await user.save();
         await SolicCamp.findOneAndDelete({
           camp: req.params.id,
@@ -275,16 +275,15 @@ exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
       const indexUserConfirmed = user.campsConfirmed.indexOf(req.params.id);
 
       if (indexCampGuest > -1) {
-        camp.guests.splice(indexCampGuest, 1);
-        await camp.save();
-        //await SolicCamp.findOneAndDelete({camp: req.params.id, person: user._id})
-        await SolicCamp.findOneAndUpdate({
+        camp.guests.splice(indexCampGuest, 1)
+        await camp.save()
+        await SolicCamp.findOneAndDelete({
           camp: req.params.id,
           person: user._id,
-          status: 'cancelled',
         });
       } else if (indexCampGuestConfirmed > -1) {
         camp.confirmedGuests.splice(indexCampGuestConfirmed, 1);
+        camp.rejectedGuests.push(user._id)
         await camp.save();
         await SolicCamp.findOneAndUpdate({
           camp: req.params.id,

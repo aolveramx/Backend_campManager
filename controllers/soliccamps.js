@@ -99,17 +99,19 @@ exports.updateSolicCamp = asyncHandler(async (req, res, next) => {
       if(index3 > -1){
         camp.confirmedHelpers.splice(index3,1)
       }
-      const campUpdated = await Camp.findByIdAndUpdate(soliccamp.camp, {helpers: camp.helpers, confirmedHelpers: camp.confirmedHelpers})
+      camp.rejectedHelpers.push(soliccamp.person)
+      const campUpdated = await Camp.findByIdAndUpdate(soliccamp.camp, {helpers: camp.helpers, confirmedHelpers: camp.confirmedHelpers, rejectedHelpers: camp.rejectedHelpers})
     } else if(user.role === 'guest') {
       const index2 = camp.guests.indexOf(soliccamp.person)
       const index3 = camp.confirmedGuests.indexOf(soliccamp.person)
       if (index2 > -1){
         camp.guests.splice(index2,1)
-      };
+      }
       if(index3 > -1){
         camp.confirmedGuests.splice(index3,1)
       }
-      const campUpdated = await Camp.findByIdAndUpdate(soliccamp.camp, {guests: camp.guests, confirmedGuests: camp.confirmedGuests})
+      camp.rejectedGuests.push(soliccamp.person)
+      const campUpdated = await Camp.findByIdAndUpdate(soliccamp.camp, {guests: camp.guests, confirmedGuests: camp.confirmedGuests, rejectedGuests: camp.rejectedGuests})
     }
 
     if(index > -1){
