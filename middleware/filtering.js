@@ -11,13 +11,6 @@ const filtering = (model) => async (req, res, next) => {
   const removeFields = ['select', 'sort', 'page', 'limit']
   removeFields.forEach(param => delete reqQuery[param])
  
-  // let queryStr = JSON.stringify(reqQuery)
-  // queryStr = queryStr.replace(/\b(in)\b/g, match => `$${match}`)
-  // query = model.find(JSON.parse(queryStr))
-
-  // console.log(req.body,'req.body')
-  // console.log(req.query,'req.query')
-  
   //Request transformations
   if(req.query) {
     const queryTransformed = queryCapitalized(reqQuery)

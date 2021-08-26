@@ -112,14 +112,14 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
 
   file.name = `photo_${user._id}${path.parse(file.name).ext}`
 
+  user.photo= file.name
+  await user.save()
+
   file.mv(`${process.env.USER_PHOTO_UPLOAD}/${file.name}`, async error => {
     if (error) {
       console.log(error)
       return next(new ErrorResponse(`Problem with file upload`, 500))
     }
-
-    user.photo= file.name
-    await user.save()
 
     res.status(200).json({
       success: true,
@@ -176,14 +176,14 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
 
   file.name = `CV_${user._id}${path.parse(file.name).ext}`
 
+  user.curriculum= file.name
+  await user.save()
+
   file.mv(`${process.env.USER_FILE_UPLOAD}/${file.name}`, async error => {
     if (error) {
       console.log(error)
       return next(new ErrorResponse(`Problem with file upload`, 500))
     }
-
-    user.curriculum= file.name
-    await user.save()
 
     res.status(200).json({
       success: true,
