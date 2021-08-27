@@ -30,6 +30,57 @@ describe('GET /api/v1/camps', () => {
   
 });
 
+describe('GET /api/v1/camps/:id', () => {
+  
+  it('test that route exists', async () => {
+    
+    await api
+      .get(`/api/v1/camps/:id`)
+      .expect(404)
+      .expect('Content-Type', /application\/json/)
+
+  })
+  
+});
+
+describe('POST /api/v1/camps/:id', () => {
+  
+  it('test that route exists', async () => {
+    
+    await api
+      .post(`/api/v1/camps/`)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+  })
+  
+});
+
+describe('PUT /api/v1/camps/:id', () => {
+  
+  it('test that route exists', async () => {
+    
+    await api
+      .put(`/api/v1/camps/1`)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+  })
+  
+});
+
+describe('DELETE /api/v1/camps/:id', () => {
+  
+  it('test that route exists', async () => {
+    
+    await api
+      .post(`/api/v1/camps/1`)
+      .expect(404)
+
+  })
+  
+});
+
 afterAll(() => {
   mongoose.connection.close()
   server.close()

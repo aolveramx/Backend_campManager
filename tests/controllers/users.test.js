@@ -3,8 +3,7 @@ const {server} = require('../../server')
 const User = require('../../models/User')
 const { 
   users, 
-  api, 
-  getCampsContent
+  api,
 } = require('../helpers/helpers')
 
 beforeEach(async () => {
@@ -19,12 +18,62 @@ beforeEach(async () => {
 
 describe('GET /api/v1/users', () => {
   
-  it('should return all users', async () => {
+  it('test that route exists', async () => {
     
     await api
       .get('/api/v1/users')
-      .expect(200)
+      .expect(401)
       .expect('Content-Type', /application\/json/)
+
+  })
+  
+});
+
+describe('GET /api/v1/users/:id', () => {
+  
+  it('test that route exists', async () => {
+    
+    await api
+      .get(`/api/v1/camps/:id`)
+      .expect(404)
+      .expect('Content-Type', /application\/json/)
+
+  })
+  
+});
+
+describe('POST /api/v1/users', () => {
+  
+  it('test that route exists', async () => {
+    
+    await api
+      .post(`/api/v1/users`)
+      .expect(404)
+
+  })
+  
+});
+
+describe('PUT /api/v1/users/:id', () => {
+  
+  it('test that route exists', async () => {
+    
+    await api
+      .put(`/api/v1/users/1`)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+  })
+  
+});
+
+describe('DELETE /api/v1/users/:id', () => {
+  
+  it('test that route exists', async () => {
+    
+    await api
+      .post(`/api/v1/users/1`)
+      .expect(404)
 
   })
   
