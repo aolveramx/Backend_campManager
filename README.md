@@ -2,21 +2,13 @@
 
 ## Developer features
 
-<br>
-
-#### **Start Server in development mode:**
-
-<br>
+### **Start Server in development mode:**
 
 ```ssh
 npm run dev
 ```
 
-<br>
-
-#### **Seeder functionality:**
-
-<br>
+### **Seeder functionality:**
 
 #### Import data:
 
