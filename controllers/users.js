@@ -110,10 +110,13 @@ exports.userPhotoUpload = asyncHandler(async (req, res, next) => {
     )
   }
 
+  file.name = `photo_${user._id}${path.parse(file.name)}`
+  //Do not remove second assign to file.name without it file.name ends in [object object]
   file.name = `photo_${user._id}${path.parse(file.name).ext}`
 
   user.photo= file.name
   await user.save()
+
 
   file.mv(`${process.env.USER_PHOTO_UPLOAD}/${file.name}`, async error => {
     if (error) {

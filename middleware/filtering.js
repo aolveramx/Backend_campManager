@@ -1,5 +1,6 @@
 
 const { queryCapitalized, datesConversion, datesStringConversion } = require("../utils/StringTransformation")
+const { removeDuplicates, onlyGetDuplicates } = require('../utils/removeDuplicates')
 const Camp = require('../models/Camp')
 
 const filtering = (model) => async (req, res, next) => {
@@ -17,6 +18,8 @@ const filtering = (model) => async (req, res, next) => {
     const filterDates = datesConversion(reqQuery)
     let resultDates = {'name':{$in:[]}}
     let resultNameLocation = {}
+    let resultActivities = {'name':{$in:[]}}
+    let resultDatesActivities = {'name':{$in:[]}}
     let result={}
     
     //Filtering by location and name
@@ -107,18 +110,40 @@ const filtering = (model) => async (req, res, next) => {
     resultFrom.name.$in.filter(campName => resultTo.name.$in.includes(campName) ? resultDates.name.$in.push(campName) : next);
     //}
 
+    //Filtering by activities
+    if(req.query.activities){
+      let activities = req.query.activities.split(",")
+      const campsPerActivities = []
+      activities.forEach(act => {
+        camps.forEach(camp => {
+          camp.activities.includes(act) ? campsPerActivities.push(camp.name) : next
+        })
+      })
+      if(activities.length == 1){
+        resultActivities.name.$in = removeDuplicates(campsPerActivities)
+      } else {
+        resultActivities.name.$in = onlyGetDuplicates(campsPerActivities)
+      }
+    }
 
-    //resultNameLocation and resultDates comparaisson
+    //resultDates and resultActivities comparaisson
+    if(resultActivities.name.$in.length == 0) {
+      resultDatesActivities = resultDates
+    }else if(resultActivities.name.$in.length != 0) {
+      resultActivities.name.$in.filter(campName => resultDates.name.$in.includes(campName) ? resultDatesActivities.name.$in.push(campName) : next)
+    }
+
+    //resultNameLocation and resultDatesActivities comparaisson
     if(!resultNameLocation.name && !resultNameLocation.location){
-      result=resultDates
+      result=resultDatesActivities
     } else if(resultNameLocation.location && resultNameLocation.name){
       result={'name':{$in:[]},'location':{$in:resultNameLocation.location.$in}}
-      resultNameLocation.name.$in.filter(campName => resultDates.name.$in.includes(campName) ? result.name.$in.push(campName) : next)
+      resultNameLocation.name.$in.filter(campName => resultDatesActivities.name.$in.includes(campName) ? result.name.$in.push(campName) : next)
     } else if(!resultNameLocation.location && resultNameLocation.name){
       result={'name':{$in:[]}}
-    resultNameLocation.name.$in.filter(campName => resultDates.name.$in.includes(campName) ? result.name.$in.push(campName) : console.log(campName,'campname',typeof(campName)))
+    resultNameLocation.name.$in.filter(campName => resultDatesActivities.name.$in.includes(campName) ? result.name.$in.push(campName) : next)
     } else if(resultNameLocation.location && !resultNameLocation.name){
-      result={'name':{$in:resultDates.name.$in},'location':{$in:resultNameLocation.location.$in}}
+      result={'name':{$in:resultDatesActivities.name.$in},'location':{$in:resultNameLocation.location.$in}}
     }
 
     //Query generation
