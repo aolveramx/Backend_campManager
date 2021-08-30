@@ -119,7 +119,11 @@ const filtering = (model) => async (req, res, next) => {
           camp.activities.includes(act) ? campsPerActivities.push(camp.name) : next
         })
       })
-      resultActivities.name.$in = onlyGetDuplicates(campsPerActivities)
+      if(activities.length == 1){
+        resultActivities.name.$in = removeDuplicates(campsPerActivities)
+      } else {
+        resultActivities.name.$in = onlyGetDuplicates(campsPerActivities)
+      }
     }
 
     //resultDates and resultActivities comparaisson
