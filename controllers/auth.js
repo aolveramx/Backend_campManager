@@ -3,6 +3,7 @@ const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const sendEmail = require('../utils/sendEmail')
 const User = require('../models/User')
+const { capitalizeID } = require('../utils/capitalizeID') 
 
 /**
  * @route   POST api/v1/auth/register
@@ -10,6 +11,10 @@ const User = require('../models/User')
  * @access  Public
  */
 exports.register = asyncHandler(async (req, res, next) => {
+  if(req.body.idNumber) {
+    req.body.idNumber = capitalizeID(req.body.idNumber)
+  }
+
   const user = new User(req.body)
   const userSaved = await user.save()
   res.status(201).json({ success: true, data: userSaved })
