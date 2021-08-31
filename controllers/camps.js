@@ -6,6 +6,7 @@ const SolicCamp = require('../models/SolicCamp');
 const {
   queryCapitalized,
   capitalizeFirstLetter,
+  hasBlanckSpace
 } = require('../utils/StringTransformation');
 const { tokenDecoder } = require('../utils/TokenDecoder');
 
@@ -52,9 +53,10 @@ exports.getCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.createCamp = asyncHandler(async (req, res, next) => {
-  req.body.description = capitalizeFirstLetter(req.body.description);
-  req.body.address = capitalizeFirstLetter(req.body.address);
-  queryCapitalized(req.body);
+  req.body.description = capitalizeFirstLetter(req.body.description)
+  req.body.location = hasBlanckSpace(req.body.location)
+  req.body.name = hasBlanckSpace(req.body.name)
+  queryCapitalized(req.body)
   const camp = await Camp.create(req.body);
 
   res.status(201).json({ success: true, data: camp });
@@ -67,6 +69,15 @@ exports.createCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.updateCamp = asyncHandler(async (req, res, next) => {
+  if(req.body.name){
+    req.body.name = hasBlanckSpace(req.body.name)
+  }
+  if(req.body.description){
+    req.body.description = capitalizeFirstLetter(req.body.description)
+  }
+  if(req.body.location){
+    req.body.location = hasBlanckSpace(req.body.location)
+  }
   const camp = await Camp.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,

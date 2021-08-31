@@ -18,6 +18,7 @@ let hasBlanckSpace = function(string) {
     if(string.includes(' ')) {
         const blanckSpace = string.search(/\s/)
         subString1 = string.slice(0, blanckSpace)
+        subString1 = capitalizeFirstLetter(subString1)
         subString2 = capitalizeFirstLetter(string.slice(blanckSpace))
         if(subString2.includes(' ')){
             const blanckSpace2 = subString2.search(/\s/)
@@ -95,4 +96,4 @@ let datesStringConversion = function(string) {
     }
 }
 
-module.exports = { capitalizeFirstLetter, queryCapitalized, datesConversion, datesStringConversion }
+module.exports = { hasBlanckSpace, capitalizeFirstLetter, queryCapitalized, datesConversion, datesStringConversion }
