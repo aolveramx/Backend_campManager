@@ -53,10 +53,16 @@ exports.getCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.createCamp = asyncHandler(async (req, res, next) => {
-  req.body.description = capitalizeFirstLetter(req.body.description)
-  req.body.location = hasBlanckSpace(req.body.location)
-  req.body.name = hasBlanckSpace(req.body.name)
-  queryCapitalized(req.body)
+  if(req.body.description){
+    req.body.description = capitalizeFirstLetter(req.body.description)
+  }
+  if(req.body.location){
+    req.body.location = hasBlanckSpace(req.body.location)
+  }
+  if(req.body.name){
+    req.body.name = hasBlanckSpace(req.body.name)
+  }
+  req.body = queryCapitalized(req.body)
   const camp = await Camp.create(req.body);
 
   res.status(201).json({ success: true, data: camp });
