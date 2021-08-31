@@ -204,7 +204,7 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
 exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
   
   if(req.user.role === 'helper' || req.user.role === 'guest') {
-    if(req.user._id !== req.params.id) {
+    if(req.user._id != req.params.id) {
       return next(
         new ErrorResponse('You are not authorized to delete other users account', 401)
       )
