@@ -4,6 +4,7 @@ const asyncHandler = require('../middleware/async')
 const User = require('../models/User')
 const SolicCamp = require('../models/SolicCamp')
 const { tokenDecoder } = require('../utils/TokenDecoder');
+const { capitalizeID } = require('../utils/capitalizeID') 
 
 /**
  * @route   GET api/v1/auth/users
@@ -41,6 +42,10 @@ exports.getUser = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.updateUser = asyncHandler(async (req, res, next) => {
+  if(req.body.idNumber) {
+    req.body.idNumber = capitalizeID(req.body.idNumber)
+  }
+  
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
