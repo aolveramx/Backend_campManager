@@ -105,6 +105,9 @@ exports.updateCamp = asyncHandler(async (req, res, next) => {
  * @role    admin
  */
 exports.deleteCamp = asyncHandler(async (req, res, next) => {
+  const tokenDecoded = tokenDecoder(req);
+  const user = await User.findById(tokenDecoded.id);
+
   const camp = await Camp.findByIdAndDelete(req.params.id);
 
   if (!camp) {
@@ -112,6 +115,8 @@ exports.deleteCamp = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Camp not found with id of ${req.params.id}`, 404),
     );
   }
+
+  res.status(200).json({ success: true, data: {} });
 });
 
 /**
@@ -222,7 +227,6 @@ exports.subscribeCamp = asyncHandler(async (req, res, next) => {
  * @role    helper/guest
  */
 exports.unsubscribeCamp = asyncHandler(async (req, res, next) => {
-
   const tokenDecoded = tokenDecoder(req);
   const user = await User.findOne({ _id: tokenDecoded.id });
 
