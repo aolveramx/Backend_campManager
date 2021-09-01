@@ -207,22 +207,26 @@ exports.userCvUpload = asyncHandler(async (req, res, next) => {
  * @role    admin/guest/helper
  */
 exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id)
+
+  const tokenDecoded = tokenDecoder(req);
+  const reqUser = await User.findById(tokenDecoded.id);
   
   if(req.user.role === 'helper' || req.user.role === 'guest') {
-    if(req.user._id != req.params.id) {
+    if(reqUser._id != req.params.id) {
       return next(
         new ErrorResponse('You are not authorized to delete other users account', 401)
       )
     }
   }
 
-  const user = await User.findByIdAndDelete(req.params.id)
-
   if (!user) {
     return next(
       new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
     )
   }
+
+  await User.findByIdAndDelete(req.params.id)
 
   res.status(200).json({ success: true, data: {} })
 });
