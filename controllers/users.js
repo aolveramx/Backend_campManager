@@ -212,7 +212,7 @@ exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
   const tokenDecoded = tokenDecoder(req);
   const reqUser = await User.findById(tokenDecoded.id);
   
-  if(req.user.role === 'helper' || req.user.role === 'guest') {
+  if(reqUser.role === 'helper' || reqUser.role === 'guest') {
     if(reqUser._id != req.params.id) {
       return next(
         new ErrorResponse('You are not authorized to delete other users account', 401)
@@ -233,7 +233,7 @@ exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
 
 /**
  * @route   GET api/v1/users/:id/solics
- * @desc    Delete a user
+ * @desc    Camps solics a user
  * @access  Private
  * @role    admin/guest/helper
  */
@@ -255,7 +255,6 @@ exports.deleteMyAccount = asyncHandler(async (req, res, next) => {
   }
 
   const solics = await SolicCamp.find({person:req.params.id})
-  console.log(solics)
 
   res.status(200).json({ success: true, data: solics })
 })
