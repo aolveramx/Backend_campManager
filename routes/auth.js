@@ -19,8 +19,6 @@ router.route('/me').get(protect, getMe)
 
 router.route('/logout').get(logout)
 
-router.route('/:id/updateinfo').put(updateInfo)
-
 router.route('/forgotpassword').post(forgotPassword)
 
 router.route('/resetpassword/:resettoken').put(resetPassword)

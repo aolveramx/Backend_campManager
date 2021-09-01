@@ -81,17 +81,6 @@ exports.logout = asyncHandler(async (req, res, next) => {
 })
 
 /**
- * @route   PUT api/v1/auth/:id/updateInfo
- * @desc    Update details
- * @access  Private
- * @role    admin/guest/helper
- */
-exports.updateInfo = asyncHandler(async (req, res, next) => {
-  console.log(req)
-  res.status(200).json({ success: true, msg: 'Update user info' })
-})
-
-/**
  * @route   POST api/v1/auth/forgotpassword
  * @desc    Forgot password
  * @access  Public
